@@ -1,0 +1,23 @@
+Options -Indexes
+
+<FilesMatch "(?i)^(composer\.(json|lock|phar)|package(-lock)?\.json|\.env|README\.md|PRO_UPGRADE\.txt|Notas\.txt|.*\.sql|sync\.php|patch\.php|patch_notif\.php)$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "(?i)\.(phar|ps1|bat|cmd|sql|log)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule (?i)^(?:dat_neiva|vendor|tmp)(?:/|$) - [F,L]
+    RewriteRule (?i)^complementos/PhpSpreadsheet-4\.4\.0(?:/|$) - [F,L]
+    RewriteRule (?i)^Arbimaps/logs(?:/|$) - [F,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

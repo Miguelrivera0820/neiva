@@ -1,0 +1,504 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #020202;
+    color: #FEFEFE;
+}
+
+html,
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    isolation: isolate;
+}
+
+/* Imagen de fondo con blur, oscuridad y parallax */
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: -60px;
+
+    background-image: url("imagen/BG_1.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    filter: blur(6px) brightness(45%);
+    transform: translate3d(0, -24px, 0) scale(1.12);
+    transform-origin: center;
+    will-change: transform;
+
+    animation: moverBackground 6s ease-in-out infinite alternate;
+    z-index: -2;
+}
+
+/* Capa oscura adicional opcional */
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.233);
+    z-index: -1;
+}
+
+/* Contenido encima */
+.hero .contenido {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-align: center;
+}
+
+@keyframes moverBackground {
+    0% {
+        transform: translate3d(0, -24px, 0) scale(1.12);
+    }
+
+    100% {
+        transform: translate3d(0, 24px, 0) scale(1.12);
+    }
+}
+
+
+.bg-footer {
+    background-color: #002f55b6;
+}
+
+.login-header {
+    min-height: 82px;
+    backdrop-filter: blur(8px);
+}
+
+.login-header img {
+    max-width: 90px;
+    height: auto;
+}
+
+.login-main {
+    min-height: calc(100vh - 82px);
+    padding: 24px 12px;
+}
+
+.login-card {
+    width: min(100%, 1080px);
+}
+
+.card-login {
+    background-color: #FEFEFE;
+    color: #020202;
+    background-image: url(imagen/logobnb.png);
+    background-size: 13rem;
+    background-repeat: no-repeat;
+    background-position: 105% 115%;
+
+}
+
+.login-panel-col {
+    min-height: 420px;
+}
+
+.panel-az {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    --panel-parallax-x: 0px;
+    --panel-parallax-y: 0px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 30% 0%;
+    /* background-color: #002F55; */
+    color: #FEFEFE;
+    background-color: #002F55;
+    background-image: none;
+}
+
+.panel-az::before {
+    content: "";
+    position: absolute;
+    inset: -34px;
+    background-image: url("imagen/Neiva_1.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 30% center;
+    transform: translate3d(var(--panel-parallax-x), var(--panel-parallax-y), 0) scale(1.08);
+    transition: transform 0.18s ease-out;
+    will-change: transform;
+    z-index: 0;
+}
+
+.panel-az>* {
+    position: relative;
+    z-index: 1;
+}
+
+.text-outline {
+    color: transparent;
+    /* Hace que el relleno sea transparente */
+    -webkit-text-stroke: 1px white;
+    /* Borde blanco al texto */
+    position: relative;
+}
+
+.text-outline::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    /* Ajusta la posición de la línea */
+    left: 0;
+    width: 100%;
+    height: 1px;
+    /* Grosor de la línea */
+}
+
+.input-login {
+    background-color: #EDF2F7;
+    /* border: 1px solid #d1d1d1a9; */
+    border: none;
+    height: 50px;
+    border-radius: 15px;
+    color: #000000;
+    padding-left: 10px;
+    font-size: 0.85em;
+    width: 100%;
+}
+
+.input-login::placeholder {
+    color: d;
+    opacity: 0.7;
+}
+
+.password-field {
+    position: relative;
+    width: 100%;
+}
+
+.password-field .input-password {
+    width: 100%;
+    padding-right: 46px;
+}
+
+.toggle-password-btn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #FEFEFE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.toggle-password-btn:hover,
+.toggle-password-btn:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+    outline: none;
+}
+
+.texto_login {
+    color: #0A2C1B;
+
+}
+
+@media (min-width: 1440px) {
+    .texto_login {
+        background-size: 50%;
+        background-position: 100% 10%;
+        background-repeat: no-repeat;
+    }
+}
+
+.boton_login {
+    background: linear-gradient(214deg, rgba(10, 44, 27, 1) var(--color-stop), rgba(128, 172, 101, 1) 100%);
+    transition: transform 0.35s ease, --color-stop 0.35s ease;
+    border: none;
+    border-radius: 15px;
+    height: 45px;
+    color: #FEFEFE;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+@media (max-width: 767.98px) {
+    .hero::before {
+        inset: -30px;
+        filter: blur(4px) brightness(45%);
+        transform: translate3d(0, 0, 0) scale(1.08);
+        animation: none;
+    }
+
+    .login-header {
+        min-height: 70px;
+        gap: 18px !important;
+    }
+
+    .login-header img {
+        max-width: 72px;
+    }
+
+    .login-main {
+        min-height: auto;
+        padding: 18px 12px 28px;
+        align-items: flex-start !important;
+    }
+
+    .login-card {
+        padding: 16px !important;
+        border-radius: 24px !important;
+        background-size: 9rem;
+        background-position: 118% 106%;
+    }
+
+    .login-panel-col {
+        min-height: 230px;
+        padding: 0 !important;
+        margin-top: 16px;
+    }
+
+    .panel-az {
+        min-height: 230px;
+    }
+
+    .texto_login {
+        padding: 10px 4px 18px !important;
+    }
+
+    .texto_login h1 {
+        font-size: clamp(1.65rem, 7vw, 2.2rem);
+    }
+
+    .texto_login p {
+        font-size: 0.88rem !important;
+        margin-bottom: 0;
+    }
+
+    .login-form {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .input-login {
+        height: 48px;
+        border-radius: 13px;
+    }
+
+    .actions {
+        margin-top: 18px !important;
+    }
+}
+
+@media (max-width: 380px) {
+    .login-card {
+        padding: 12px !important;
+        border-radius: 20px !important;
+    }
+
+    .panel-az,
+    .login-panel-col {
+        min-height: 200px;
+    }
+
+    .panel-az h1 {
+        font-size: 1.55rem;
+    }
+}
+
+/* .boton_login:hover {
+    background-color: #0b2548;
+    color: #ffffff;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    transform: scale(1.02);
+}  */
+
+/* Definimos una variable de tipo porcentaje para el primer color */
+@property --color-stop {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 84%;
+}
+
+
+
+.boton_login:hover {
+    --color-stop: 53%;
+    /* Cambiamos el valor en hover y se animará solo */
+    transform: scale(1.02);
+}
+
+.btn_registrar {
+    background-color: transparent;
+    border: 1px solid #FEFEFE;
+    border-radius: 10px;
+    height: 35px;
+    color: #FEFEFE;
+    font-size: 0.9em;
+    text-decoration: none;
+}
+
+.btn_registrar:hover {
+    background-color: #FEFEFE;
+    color: #0F5699;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+
+/* --- Nieve en el fondo --- */
+.snow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
+    top: -10px;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.snowflake span {
+    display: inline-block;
+    color: white;
+    opacity: 0.8;
+    will-change: transform;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(110vh);
+    }
+}
+
+/* --- Luces navideñas --- */
+.luces-navidad {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    z-index: 2;
+}
+
+.luces-navidad span {
+    width: 12px;
+    height: 20px;
+    border-radius: 50%;
+    background: red;
+    animation: parpadeo 1.5s infinite alternate;
+}
+
+.luces-navidad span:nth-child(2n) {
+    background: yellow;
+}
+
+.luces-navidad span:nth-child(3n) {
+    background: green;
+}
+
+.luces-navidad span:nth-child(4n) {
+    background: blue;
+}
+
+@keyframes parpadeo {
+    0% {
+        opacity: .3;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animación de entrada desde la izquierda */
+@keyframes entrarIzquierda {
+    0% {
+        opacity: 0;
+        transform: translateX(-80px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animación de entrada desde la derecha */
+@keyframes entrarDerecha {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Estilo del árbol */
+.navidad-arbol {
+    width: 10em;
+    position: absolute;
+    bottom: 15px;
+    left: -20px;
+    /* ajustado para no salir demasiado */
+    animation: entrarDerecha 1.3s ease-out forwards;
+}
+
+/* Estilo de los regalos */
+.navidad-regalos {
+    width: 9em;
+    position: absolute;
+    bottom: 25px;
+    right: 0;
+    animation: entrarIzquierda 1.3s ease-out forwards;
+    animation-delay: 0.3s;
+    /* Los regalos entran ligeramente después */
+}
+
+.navidad-mono {
+    width: 10em;
+    position: absolute;
+    top: -25;
+    right: -15;
+    animation: entrarIzquierda 1.5s ease-out forwards;
+
+}

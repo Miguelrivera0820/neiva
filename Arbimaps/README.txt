@@ -1,0 +1,2 @@
+Este es un mini proyecto como de práctica; se realiza con la idea de poder condensar la información en un solo index e ir haciendo la llamada dependiendo de la solitud del usuario.
+se hace para evitar estan haciendo cada una de las vista y modificar los estilos en cada una de las vistas.

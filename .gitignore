@@ -1,0 +1,64 @@
+# Entorno local
+.env
+.env.*
+!.env.example
+
+# Dependencias
+node_modules/
+vendor/
+
+# Herramientas y metadatos locales
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.agents/
+.codex/
+
+# Datos sensibles y respaldos
+*.sql
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
+*.zip
+*.7z
+*.rar
+
+# Logs y temporales
+*.log
+tmp/
+temp/
+cache/
+
+# Datos operativos y almacenamiento privado/publico legacy
+dat_neiva/
+data/
+uploads/
+tramites_conservacion/
+tramites/
+resoluciones/
+archivos/
+certificados/
+usuarios/
+acciones/
+Arbitrium_otrosi_Nuevo/
+Arbimaps/logs/
+Arbimaps/vistas/soporte/reportes_imagenes/
+Arbimaps/DOCUMENTOS/
+Arbimaps/tmp/
+
+# Scripts peligrosos o temporales de mantenimiento
+sync.php
+patch.php
+patch_notif.php
+composer.phar
+
+# Artefactos de frontend
+dist/
+build/
+coverage/
+
+# Mantener lockfiles de dependencias
+!composer.lock
+!package-lock.json
