@@ -2082,7 +2082,7 @@ $requiere_resolucion = ($tipo_tramite_actual !== 'CONSERVACION' && $rol_flujo_ac
                 let modalForm = document.getElementById("formModal");
                 let formData = new FormData(modalForm);
                 formData.set("accion", "devolver");
-                fetch("/arbimaps/Arbimaps/vistas/seguimiento/acciones/procesar_devolucion.php", {
+                fetch("<?= neiva_app_url('Arbimaps/vistas/seguimiento/acciones/procesar_devolucion.php') ?>", {
                         method: "POST",
                         body: formData
                     })

@@ -162,11 +162,11 @@ function ajustarRutaDocumento($rutaBD)
     if (empty($rutaBD)) {
         return [null, null];
     }
-    $prefijoCorrecto = "/arbimaps/Arbimaps/vistas/Personal/";
+    $prefijoCorrecto = neiva_app_url('Arbimaps/vistas/Personal/');
     if (strpos($rutaBD, $prefijoCorrecto) === 0) {
         $rutaWeb = $rutaBD;
     } else {
-        $prefijoViejo = "/arbimaps/Arbimaps/";
+        $prefijoViejo = neiva_app_url('Arbimaps/');
         if (strpos($rutaBD, $prefijoViejo) === 0) {
             $rutaBD = substr($rutaBD, strlen($prefijoViejo));
         }
@@ -419,7 +419,7 @@ function ajustarRutaDocumento($rutaBD)
             </div>
             <div class="card-body">
                 <form id="formContratacion"
-                    action="/arbimaps/Arbimaps/vistas/Personal/guardar_contratacion.php"
+                    action="<?= neiva_app_url('Arbimaps/vistas/Personal/guardar_contratacion.php') ?>"
                     method="POST"
                     enctype="multipart/form-data">
                     <input type="hidden" name="origen" value="completar">
@@ -1130,7 +1130,7 @@ function ajustarRutaDocumento($rutaBD)
             cardBody.className = "card-body";
 
             cardBody.innerHTML = `
-        <form id="formulario_otrosi_${i}" action="/Arbimaps/vistas/Personal/otrosi_guardar.php" method="POST" enctype="multipart/form-data">
+        <form id="formulario_otrosi_${i}" action="<?= neiva_app_url('Arbimaps/vistas/Personal/otrosi_guardar.php') ?>" method="POST" enctype="multipart/form-data">
           <div class="row">
             <div class="col-md-6">
               <label class="form-label" for="otr_cedula_${i}">N° Identidad</label>

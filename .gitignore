@@ -47,6 +47,7 @@ Arbimaps/logs/
 Arbimaps/vistas/soporte/reportes_imagenes/
 Arbimaps/DOCUMENTOS/
 Arbimaps/tmp/
+neiva_private_storage/
 
 # Scripts peligrosos o temporales de mantenimiento
 sync.php

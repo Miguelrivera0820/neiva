@@ -1760,7 +1760,7 @@ $nombre = $_SESSION['nombre_usuario'];
                         ${data.message}
                     </div>
                     <div class="mt-4">
-                        <button onclick="window.location.href='/arbimaps/Arbimaps/index.php?page=baqueanos/solicitudes/vistas/detalles_gerencia';"
+                        <button onclick="window.location.href='<?= neiva_app_url('Arbimaps/index.php?page=baqueanos/solicitudes/vistas/detalles_gerencia') ?>';"
                             class="btn-swal-primary">
                             Aceptar
                         </button>

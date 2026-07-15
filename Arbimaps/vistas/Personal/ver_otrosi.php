@@ -18,8 +18,8 @@ function normalizarRutaDoc(string $ruta): string
         return $ruta;
     }
 
-    $old = '/arbimaps/Arbimaps/';
-    $new = '/arbimaps/Arbimaps/vistas/Personal/';
+    $old = neiva_app_url('Arbimaps/');
+    $new = neiva_app_url('Arbimaps/vistas/Personal/');
 
     if (strpos($ruta, $old) === 0) {
         $resto = substr($ruta, strlen($old));

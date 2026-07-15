@@ -204,7 +204,7 @@ $mysqli->close();
                 <div class="card shadow-sm p-3 ">
                     <label for="numero_identidad" class="form-label fw-bold text-center" style="font-size:0.9em;">USUARIO</label>
                     <?php if (!empty($foto_user) && !empty($id_usuario_foto)): ?>
-                        <img src="/arbimaps/Arbimaps/assets/fotos_usuarios/<?php echo (int)$id_usuario_foto; ?>/<?php echo htmlspecialchars($foto_user); ?>"
+                        <img src="<?= neiva_app_url('Arbimaps/assets/fotos_usuarios/') ?><?php echo (int)$id_usuario_foto; ?>/<?php echo htmlspecialchars($foto_user); ?>"
                             alt="Foto de usuario"
                             class="img-thumbnail rounded-circle shadow-sm"
                             style="width: 120px; height: 120px; object-fit: cover;">

@@ -534,7 +534,7 @@ $resultado = $mysqli->query($sql);
                                                 $idUsuarioFoto  = $row['id_usuario'] ?? '';
                                                 $rutaFoto = '';
                                                 if (!empty($foto) && !empty($idUsuarioFoto)) {
-                                                    $rutaFoto = "/arbimaps/Arbimaps/assets/fotos_usuarios/" . $idUsuarioFoto . "/" . $foto;
+                                                    $rutaFoto = neiva_app_url('Arbimaps/assets/fotos_usuarios/') . $idUsuarioFoto . "/" . $foto;
                                                 }
                                                 $fallback = "https://ui-avatars.com/api/?name=" . urlencode(($row['con_nombres'] ?? 'U') . ' ' . ($row['con_apellidos'] ?? '')) . "&background=002F55&color=fff";
                                                 ?>
@@ -551,7 +551,7 @@ $resultado = $mysqli->query($sql);
                                                 </div>
                                             </td>
                                             <td style='text-align: center; vertical-align: middle; font-size: 13px'>
-                                                <a href="/arbimaps/Arbimaps/index.php?page=Personal/informacion_personal&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
+                                                <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/informacion_personal&con_num_identidad=') ?><?php echo urlencode($row['con_num_identidad']); ?>"
                                                     class="text-primary">
                                                     <?php echo htmlspecialchars($row['con_num_identidad']); ?>
                                                 </a>
@@ -572,7 +572,7 @@ $resultado = $mysqli->query($sql);
                                                         PERSONAL EN VALIDACIÓN
                                                     </span>
                                                 <?php else: ?>
-                                                    <a href="/arbimaps/Arbimaps/index.php?page=Personal/editar_personal&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
+                                                    <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/editar_personal&con_num_identidad=') ?><?php echo urlencode($row['con_num_identidad']); ?>"
                                                         class="text-decoration-none d-inline-flex align-items-center justify-content-center m-1"
                                                         style="width:32px; height:32px; color:#002F55; border-radius:6px;"
                                                         onmouseover="this.style.background='#e9f1f8'"
@@ -582,7 +582,7 @@ $resultado = $mysqli->query($sql);
                                                         title="Editar">
                                                         <i class="bi bi-pencil" style="font-size:18px;"></i>
                                                     </a>
-                                                    <a href="/arbimaps/Arbimaps/index.php?page=Personal/completar_datos&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
+                                                    <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/completar_datos&con_num_identidad=') ?><?php echo urlencode($row['con_num_identidad']); ?>"
                                                         class="text-decoration-none d-inline-flex align-items-center justify-content-center m-1"
                                                         style="width:32px; height:32px; color:#787878; border-radius:6px;"
                                                         onmouseover="this.style.background='#f0f0f0'"
@@ -612,7 +612,7 @@ $resultado = $mysqli->query($sql);
                                                                 Ya solicitado
                                                             </span>
                                                         <?php else: ?>
-                                                            <a href="/arbimaps/Arbimaps/index.php?page=Personal/solicitar_otrosi&con_id=<?php echo urlencode($row['con_id']); ?>"
+                                                            <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/solicitar_otrosi&con_id=') ?><?php echo urlencode($row['con_id']); ?>"
                                                                 class="text-decoration-none d-inline-flex align-items-center justify-content-center m-1"
                                                                 style="width:32px; height:32px; color:#198754; border-radius:6px;"
                                                                 onmouseover="this.style.background='#d1e7dd'"
@@ -684,7 +684,7 @@ $resultado = $mysqli->query($sql);
                 confirmButtonText: 'Sí, desactivar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('/arbimaps/Arbimaps/vistas/Personal/acciones/desactivar_usuario.php', {
+                    fetch('<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/desactivar_usuario.php') ?>', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -749,7 +749,7 @@ $resultado = $mysqli->query($sql);
                 `,
                 didOpen: () => {
                     document.getElementById('swalOk')?.addEventListener('click', () => {
-                        window.location.href = '/arbimaps/Arbimaps/index.php?page=Personal/personal_activo';
+                        window.location.href = '<?= neiva_app_url('Arbimaps/index.php?page=Personal/personal_activo') ?>';
                     });
                 }
             });

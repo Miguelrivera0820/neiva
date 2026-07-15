@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 $where = "";
-if (session_status() === PHP_SESSION_NONE) session_start();
-if (!isset($_SESSION['id_usuario'])) {
-    header("Location: ../../index.php");
-    exit();
-}
+require_once dirname(__DIR__, 2) . '/includes/auth.php';
+require_once dirname(__DIR__, 3) . '/conexion.php';
+neiva_require_auth();
+neiva_require_methods('GET');
+
 
 $idUsuario = (int) $_SESSION['id_usuario'];
 
@@ -25,8 +25,7 @@ $stmtUser->execute();
 $resultado = $stmtUser->get_result();
 
 if (!$resultado || $resultado->num_rows === 0) {
-    header("Location: ../../acceso_denegado.php");
-    exit();
+    neiva_abort(403, 'No fue posible cargar el perfil solicitado.');
 }
 
 $datosUsuario   = $resultado->fetch_assoc();
@@ -62,8 +61,7 @@ $rolesPermitidos = array(
 );
 
 if (!in_array($rolUsuario, $rolesPermitidos) && !in_array($rolUsuarioDos, $rolesPermitidos)) {
-    header("Location: ../../acceso_denegado.php");
-    exit();
+    neiva_abort(403, 'No tiene permisos para consultar este modulo.');
 }
 
 $cedulaSesion = (string) $_SESSION['id_usuario'];
@@ -551,7 +549,7 @@ $resultadoContratacion = $stmt->get_result();
                                                 $idUsuarioFoto  = $row['id_usuario'] ?? '';
                                                 $rutaFoto = '';
                                                 if (!empty($foto) && !empty($idUsuarioFoto)) {
-                                                    $rutaFoto = "/arbimaps/Arbimaps/assets/fotos_usuarios/" . $idUsuarioFoto . "/" . $foto;
+                                                    $rutaFoto = neiva_app_url('Arbimaps/assets/fotos_usuarios/') . $idUsuarioFoto . "/" . $foto;
                                                 }
                                                 $fallback = "https://ui-avatars.com/api/?name=" . urlencode(($row['con_nombres'] ?? 'U') . ' ' . ($row['con_apellidos'] ?? '')) . "&background=002F55&color=fff";
                                                 ?>
@@ -571,7 +569,7 @@ $resultadoContratacion = $stmt->get_result();
                                                 <div class="doc-cell">
                                                     <div class="doc-type"><?= htmlspecialchars($row['con_tipo_documento'] ?? '') ?></div>
                                                     <a class="doc-number text-primary"
-                                                        href="/arbimaps/Arbimaps/index.php?page=Personal/informacion_personal_individual&con_num_identidad=<?= urlencode($row['con_num_identidad'] ?? '') ?>">
+                                                        href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/informacion_personal_individual&con_num_identidad=') ?><?= urlencode($row['con_num_identidad'] ?? '') ?>">
                                                         <?= htmlspecialchars($row['con_num_identidad'] ?? '') ?>
                                                     </a>
                                                 </div>
@@ -592,9 +590,9 @@ $resultadoContratacion = $stmt->get_result();
                                                 <?php
                                                 $ident = urlencode($row['con_num_identidad'] ?? '');
                                                 ?>
-                                                <a href="/arbimaps/Arbimaps/index.php?page=Personal/editar_perfil_profesional&con_num_identidad=<?= $ident ?>"
+                                                <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/editar_perfil_profesional&con_num_identidad=') ?><?= $ident ?>"
                                                     class="text-primary"
-                                                    title="Editar perfil de contratación">
+                                                    title="Editar perfil de contrataciÃ³n">
                                                     <i class="bi bi-pencil" style="font-size:1.2em; color: #022F55"></i>
                                                 </a>
                                             </td>
@@ -631,9 +629,9 @@ $resultadoContratacion = $stmt->get_result();
                 allowEscapeKey: true,
                 html: `
                     <div class="swal-card">
-                        <h2 class="swal-title-like">¡Guardado!</h2>
+                        <h2 class="swal-title-like">Â¡Guardado!</h2>
                         <div class="swal-icon-wrap green">
-                            <div class="swal-icon-circle green">✓</div>
+                            <div class="swal-icon-circle green">âœ“</div>
                         </div>
                         <div class="swal-sub-like">
                             Los datos se guardaron correctamente.
@@ -647,7 +645,7 @@ $resultadoContratacion = $stmt->get_result();
                 `,
                 didOpen: () => {
                     document.getElementById('swalOk')?.addEventListener('click', () => {
-                        window.location.href = '/arbimaps/Arbimaps/index.php?page=Personal/mis_perfiles';
+                        window.location.href = '<?= neiva_app_url('Arbimaps/index.php?page=Personal/mis_perfiles') ?>';
                     });
                 }
             });
@@ -660,21 +658,21 @@ $resultadoContratacion = $stmt->get_result();
             autoWidth: false,
             scrollX: true,
             language: {
-                lengthMenu: "Mostrar _MENU_ registros por página",
+                lengthMenu: "Mostrar _MENU_ registros por pÃ¡gina",
 
                 emptyTable: `
                     <div class="py-5 text-center">
                         <div class="fw-semibold mb-2" style="color:#002F55;">
                             No tienes perfiles registrados
                         </div>
-                        <a href="/arbimaps/Arbimaps/index.php?page=Personal/agregar_mi_perfil"
+                        <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/agregar_mi_perfil') ?>"
                         class="btn btn-primary"
                         style="background:#002F55;border-color:#002F55;">
                             <i class="bi bi-plus-circle me-1"></i> Agregar nuevo
                         </a>
 
                         <div class="text-muted mt-2" style="font-size:12px;">
-                            Crea tu primer perfil de contratación.
+                            Crea tu primer perfil de contrataciÃ³n.
                         </div>
                     </div>
                 `,
@@ -687,7 +685,7 @@ $resultadoContratacion = $stmt->get_result();
                 search: "Buscar:",
                 paginate: {
                     first: "Primero",
-                    last: "Último",
+                    last: "Ãšltimo",
                     next: "Siguiente",
                     previous: "Anterior"
                 }

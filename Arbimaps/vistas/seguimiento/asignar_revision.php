@@ -1985,7 +1985,7 @@ if ($cedula_usuario && $cod_tramite) {
                 let formData = new FormData(modalForm);
                 // Forzamos que la acción sea DEVOLVER
                 formData.set("accion", "devolver");
-                fetch("/arbimaps/Arbimaps/vistas/seguimiento/acciones/procesar_devolucion.php", {
+                fetch("<?= neiva_app_url('Arbimaps/vistas/seguimiento/acciones/procesar_devolucion.php') ?>", {
                         method: "POST",
                         body: formData
                     })

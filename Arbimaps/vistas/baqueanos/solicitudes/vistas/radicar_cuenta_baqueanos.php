@@ -762,7 +762,7 @@ $nombre = $_SESSION['nombre_usuario'];
                                 <div class="upload-card w-100">
                                     <input id="sb_cuenta_baqueano" name="sb_cuenta_baqueano" type="file" accept="application/pdf,.pdf" required hidden />
                                     <label class="upload-area d-flex align-items-center gap-3 p-3 w-100" for="sb_cuenta_baqueano">
-                                        <img class="upload-icon" src="/arbimaps/Arbimaps/vistas/baqueanos/assets/img/document.png" alt="Icono de carga" />
+                                        <img class="upload-icon" src="<?= neiva_app_url('Arbimaps/vistas/baqueanos/assets/img/document.png') ?>" alt="Icono de carga" />
                                         <div class="upload-text">
                                             <div class="fw-semibold">Haz clic para cargar</div>
                                             <div class="text-muted small">PDF</div>
@@ -778,7 +778,7 @@ $nombre = $_SESSION['nombre_usuario'];
                                 <div class="upload-card w-100">
                                     <input id="sb_rut_baqueano" name="sb_rut_baqueano" type="file" accept="application/pdf,.pdf" required hidden />
                                     <label class="upload-area d-flex align-items-center gap-3 p-3 w-100" for="sb_rut_baqueano">
-                                        <img class="upload-icon" src="/arbimaps/Arbimaps/vistas/baqueanos/assets/img/document.png" alt="Icono de carga" />
+                                        <img class="upload-icon" src="<?= neiva_app_url('Arbimaps/vistas/baqueanos/assets/img/document.png') ?>" alt="Icono de carga" />
                                         <div class="upload-text">
                                             <div class="fw-semibold">Haz clic para cargar</div>
                                             <div class="text-muted small">PDF</div>
@@ -795,7 +795,7 @@ $nombre = $_SESSION['nombre_usuario'];
                                 <div class="upload-card w-100">
                                     <input id="sb_cedula_baqueano" name="sb_cedula_baqueano" type="file" accept="application/pdf,.pdf" required hidden />
                                     <label class="upload-area d-flex align-items-center gap-3 p-3 w-100" for="sb_cedula_baqueano">
-                                        <img class="upload-icon" src="/arbimaps/Arbimaps/vistas/baqueanos/assets/img/document.png" alt="Icono de carga" />
+                                        <img class="upload-icon" src="<?= neiva_app_url('Arbimaps/vistas/baqueanos/assets/img/document.png') ?>" alt="Icono de carga" />
                                         <div class="upload-text">
                                             <div class="fw-semibold">Haz clic para cargar</div>
                                             <div class="text-muted small">PDF</div>
@@ -811,7 +811,7 @@ $nombre = $_SESSION['nombre_usuario'];
                                 <div class="upload-card w-100">
                                     <input id="sb_certificado_baqueano" name="sb_certificado_baqueano" type="file" accept="application/pdf,.pdf" required hidden />
                                     <label class="upload-area d-flex align-items-center gap-3 p-3 w-100" for="sb_certificado_baqueano">
-                                        <img class="upload-icon" src="/arbimaps/Arbimaps/vistas/baqueanos/assets/img/document.png" alt="Icono de carga" />
+                                        <img class="upload-icon" src="<?= neiva_app_url('Arbimaps/vistas/baqueanos/assets/img/document.png') ?>" alt="Icono de carga" />
                                         <div class="upload-text">
                                             <div class="fw-semibold">Haz clic para cargar</div>
                                             <div class="text-muted small">PDF</div>
@@ -1004,7 +1004,7 @@ $nombre = $_SESSION['nombre_usuario'];
                         percentText.textContent = "100%";
 
                         setTimeout(() => {
-                            window.location.href = '/arbimaps/Arbimaps/index.php?page=baqueanos/solicitudes/vistas/detalles_cargar_cuenta';
+                            window.location.href = '<?= neiva_app_url('Arbimaps/index.php?page=baqueanos/solicitudes/vistas/detalles_cargar_cuenta') ?>';
                         }, 600);
                     } else {
                         modal.classList.remove("active");

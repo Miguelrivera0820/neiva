@@ -168,11 +168,11 @@ function ajustarRutaDocumento($rutaBD)
     if (empty($rutaBD)) {
         return [null, null];
     }
-    $prefijoCorrecto = "/arbimaps/Arbimaps/vistas/Personal/";
+    $prefijoCorrecto = neiva_app_url('Arbimaps/vistas/Personal/');
     if (strpos($rutaBD, $prefijoCorrecto) === 0) {
         $rutaWeb = $rutaBD;
     } else {
-        $prefijoViejo = "/arbimaps/Arbimaps/";
+        $prefijoViejo = neiva_app_url('Arbimaps/');
         if (strpos($rutaBD, $prefijoViejo) === 0) {
             $rutaBD = substr($rutaBD, strlen($prefijoViejo));
         }
@@ -363,7 +363,7 @@ $valorFormateado_sol_valor_otrosi   = '$ ' . number_format(numOrZero($sol_valor_
     </div>
 
     <div class="card rounded-4 m-3 shadow p-2">
-        <form id="multiStepForm" method="POST" action="/arbimaps/Arbimaps/vistas/Personal/acciones/edicion_solicitudes.php">
+        <form id="multiStepForm" method="POST" action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/edicion_solicitudes.php') ?>">
             <div class="container-fluid">
                 <div class="form-section" id="section1">
 
@@ -837,7 +837,7 @@ $valorFormateado_sol_valor_otrosi   = '$ ' . number_format(numOrZero($sol_valor_
                     console.log(`${key}: ${value}`);
                 }
 
-                fetch("/arbimaps/Arbimaps/vistas/Personal/acciones/edicion_solicitudes.php", {
+                fetch("<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/edicion_solicitudes.php') ?>", {
                         method: "POST",
                         body: formData
                     })
@@ -851,7 +851,7 @@ $valorFormateado_sol_valor_otrosi   = '$ ' . number_format(numOrZero($sol_valor_
                                 confirmButtonText: 'Aceptar'
                             }).then(() => {
                                 // Redirigir después de guardar
-                                window.location.href = "/arbimaps/Arbimaps/index.php?page=Personal/solicitudes_dir_operaciones";
+                                window.location.href = "<?= neiva_app_url('Arbimaps/index.php?page=Personal/solicitudes_dir_operaciones') ?>";
                             });
                         } else {
                             Swal.fire({

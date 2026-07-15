@@ -495,7 +495,7 @@ $mysqli->close();
         <!-- BOTONES VIABLE / NO VIABLE -->
         <div class="my-2 d-flex justify-content-center">
             <!-- <form method="post"
-                action="/arbimaps/Arbimaps/vistas/Personal/acciones/aprobar_presupuesto.php"
+                action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/aprobar_presupuesto.php') ?>"
                 onsubmit="return confirm('¿Confirmas marcar esta solicitud como VIABLE?');"
                 class="me-3">
 
@@ -523,7 +523,7 @@ $mysqli->close();
             </form>
 
             <!-- <form method="post"
-                action="/arbimaps/Arbimaps/vistas/Personal/acciones/rechazo_presupuesto.php"
+                action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/rechazo_presupuesto.php') ?>"
                 id="form-no-viable"
                 onsubmit="return confirm('¿Confirmas rechazar esta solicitud? Esta acción no se puede deshacer.');">
 

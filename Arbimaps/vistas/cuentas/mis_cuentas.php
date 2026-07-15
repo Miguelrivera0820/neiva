@@ -1,7 +1,8 @@
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+﻿<?php
+require_once dirname(__DIR__, 2) . '/includes/auth.php';
+require_once dirname(__DIR__, 3) . '/conexion.php';
+neiva_require_auth();
+neiva_require_methods('GET');
 
 $idUsuario = isset($_SESSION['id_usuario']) ? (int) $_SESSION['id_usuario'] : 0;
 
@@ -37,12 +38,12 @@ $result = $mysqli->query($query);
 
 
 // Se realiza una consulta para obtener el cargo del usuario
-//para permisos y manejo del MENÚ
+//para permisos y manejo del MENÃš
 // $sql = "SELECT id_usuario, cedula_usuario, rol_usuario  FROM usuarios_cons WHERE id_usuario = $idUsuario";
 // $resultado = $mysqli->query($sql);
 
 
-// Permite visualizar el menú a estos roles
+// Permite visualizar el menÃº a estos roles
 // $roles_coordinador            = ['coordinador'];
 // $roles_Lider_Reconocimiento   = ['Lider_Reconocimiento'];
 // $roles_profesional_social     = ['profesional_social'];
@@ -50,7 +51,7 @@ $result = $mysqli->query($query);
 ?>
 
 <style>
-    /* Número activo en la paginación */
+    /* NÃºmero activo en la paginaciÃ³n */
     .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
         background-color: #002F55 !important;
        
@@ -58,19 +59,19 @@ $result = $mysqli->query($query);
         color: #fff !important;
     }
 
-    /* Hover sobre números */
+    /* Hover sobre nÃºmeros */
     .dataTables_wrapper .dataTables_paginate .page-link:hover {
         background-color: #457b9d !important;
         /* Azul oscuro */
         color: #fff !important;
     }
 
-    /* Texto de los links de paginación */
+    /* Texto de los links de paginaciÃ³n */
     .dataTables_wrapper .dataTables_paginate .page-link {
         color: #002f55 !important;
         /* Azul Bootstrap */
         border-radius: 8px;
-        /* Bordes más redondeados */
+        /* Bordes mÃ¡s redondeados */
         margin: 0 2px;
     }
 
@@ -108,7 +109,7 @@ $result = $mysqli->query($query);
 
     /* --- COLORES PERSONALIZADOS PARA CADA TAB --- */
 
-    /* 🟦 Radicadas (Azul) */
+    /* ðŸŸ¦ Radicadas (Azul) */
     .nav-link.radicadas-tab {
         background: #002f55c7;
         color: #ffffffd8;
@@ -149,13 +150,13 @@ $result = $mysqli->query($query);
         font-size: 14px !important;
     }
 </style>
-<!-- DataTables CSS con integración Bootstrap 5 -->
+<!-- DataTables CSS con integraciÃ³n Bootstrap 5 -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
 <div class="container-fluid ">
     <div class="my-4 text-center">
         <h4 class=" mb-0 fw-bold mb-2" style="color: #002F55; font-weight: 700 !important ">MODULO DE CUENTAS</h4>
-        <small> En este apartado podrás consultar tanto el estado actual de tu cuenta como el registro de cuentas pagadas y rechazadas</small>
+        <small> En este apartado podrÃ¡s consultar tanto el estado actual de tu cuenta como el registro de cuentas pagadas y rechazadas</small>
     </div>
 
 
@@ -232,15 +233,15 @@ $result = $mysqli->query($query);
                             <thead>
                                 <tr>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Fecha</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">N° Radicado</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">Cédula</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">NÂ° Radicado</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">CÃ©dula</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Nombre</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Apellido</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Cargo</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Proyecto</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">Año</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">AÃ±o</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Periodo</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">Fecha de Aprobación</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">Fecha de AprobaciÃ³n</th>
                                 </tr>
                             </thead>
 
@@ -263,7 +264,7 @@ $result = $mysqli->query($query);
                                             echo "<td style='text-align: center; vertical-align: middle; font-size: 14px'>" . htmlspecialchars($row['proyecto']) . "</td>";
                                             echo "<td style='text-align: center; vertical-align: middle; font-size: 14px'>" . htmlspecialchars($row['anio_cuenta']) . "</td>";
                                             echo "<td style='text-align: center; vertical-align: middle; font-size: 14px; font-weight:700; background-color:#002F55; color: white'>" . htmlspecialchars($row['Periodo_Facturacion']) . "</td>";
-                                            echo "<td style='text-align: center; vertical-align: middle; font-size: 14px'>" . htmlspecialchars($row['fecha_aprobado'] ?? 'En proceso de validación') . "</td>";
+                                            echo "<td style='text-align: center; vertical-align: middle; font-size: 14px'>" . htmlspecialchars($row['fecha_aprobado'] ?? 'En proceso de validaciÃ³n') . "</td>";
                                         }
                                     } else {
                                         // echo "<tr><td colspan='7'>No se encontraron registros disponibles</td></tr>";
@@ -306,14 +307,14 @@ $result = $mysqli->query($query);
                         <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px ">Fecha radicación</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">ID Radicación</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">Cédula</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px ">Fecha radicaciÃ³n</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">ID RadicaciÃ³n</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">CÃ©dula</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Nombres</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Apellidos</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Cargo</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Proyecto</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">Año</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px">AÃ±o</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px">Mes</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px ">Valor Pagado</th>
                                 </tr>
@@ -399,12 +400,12 @@ $result = $mysqli->query($query);
                             <thead>
                                 <tr>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px " class="text-center">Fecha de rechazo</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px " class="motivo-rechazo text-center">Motivo de Devolución</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px " class="text-center">Cédula</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px " class="motivo-rechazo text-center">Motivo de DevoluciÃ³n</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px " class="text-center">CÃ©dula</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px " class="text-center">Nombres</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px " class="text-center">Apellidos</th>
                                     <th style="text-align: center; vertical-align: middle; font-size: 14px " class="text-center">Devuelto Por</th>
-                                    <th style="text-align: center; vertical-align: middle; font-size: 14px " class="text-center">Año</th>
+                                    <th style="text-align: center; vertical-align: middle; font-size: 14px " class="text-center">AÃ±o</th>
                                 </tr>
                             </thead>
 
@@ -467,7 +468,7 @@ $result = $mysqli->query($query);
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-    <!-- script para poner en español las tablas -->
+    <!-- script para poner en espaÃ±ol las tablas -->
     <script>
         $(document).ready(function() {
 

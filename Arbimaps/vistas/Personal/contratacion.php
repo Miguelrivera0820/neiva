@@ -191,7 +191,7 @@ $titulo_pagina = "Contratación de Personal";
 
             <!-- FORMULARIO PRINCIPAL -->
             <form id="formContratacion"
-                action="/arbimaps/Arbimaps/vistas/Personal/guardar_contratacion.php"
+                action="<?= neiva_app_url('Arbimaps/vistas/Personal/guardar_contratacion.php') ?>"
                 method="POST"
                 enctype="multipart/form-data">
 
@@ -1766,7 +1766,7 @@ $titulo_pagina = "Contratación de Personal";
                             </button>
                             <!-- Panel + Enviar Datos -->
                             <div class="panel-enviar-datos mx-3">
-                                <a href="/arbimaps/Arbimaps/index.php?page=Personal/personal_activo" class="btn-enviar-datos">
+                                <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/personal_activo') ?>" class="btn-enviar-datos">
                                     Enviar Datos
                                 </a>
                             </div>
@@ -2447,7 +2447,7 @@ $titulo_pagina = "Contratación de Personal";
             cardBody.className = "card-body";
 
             cardBody.innerHTML = `
-            <form id="formulario_otrosi_${i}" action="/arbimaps/Arbimaps/vistas/Personal/otrosi_guardar.php" method="POST" enctype="multipart/form-data">
+            <form id="formulario_otrosi_${i}" action="<?= neiva_app_url('Arbimaps/vistas/Personal/otrosi_guardar.php') ?>" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
                         <label class="form-label" for="otr_cedula_${i}">N° Identidad</label>
@@ -2687,7 +2687,7 @@ $titulo_pagina = "Contratación de Personal";
 
             // OJO: aquí usamos DIV en vez de FORM
             const wrapperId = `wrapper_estudios_${i}`;
-            const actionUrl = "/arbimaps/Arbimaps/vistas/Personal/estudios_guardar.php";
+            const actionUrl = "<?= neiva_app_url('Arbimaps/vistas/Personal/estudios_guardar.php') ?>";
 
             cardBody.innerHTML = `
         <div id="${wrapperId}" class="estudios-wrapper" data-action="${actionUrl}">
@@ -2862,7 +2862,7 @@ $titulo_pagina = "Contratación de Personal";
             cardBody.className = "card-body";
 
             const wrapperId = `wrapper_experiencia_${i}`;
-            const actionUrl = "/arbimaps/Arbimaps/vistas/Personal/experiencia_guardar.php";
+            const actionUrl = "<?= neiva_app_url('Arbimaps/vistas/Personal/experiencia_guardar.php') ?>";
 
             cardBody.innerHTML = `
               <div id="${wrapperId}" class="experiencia-wrapper" data-action="${actionUrl}">

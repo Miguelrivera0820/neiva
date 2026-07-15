@@ -1739,7 +1739,7 @@ $valorFormateadoTransporte  = '$ ' . number_format((float)$sb_cuanto_transporte,
                 .then(data => {
                     if (data.success) {
                         Swal.fire("Éxito", data.message, "success").then(() => {
-                            window.location.href = "/arbimaps/Arbimaps/index.php?page=baqueanos/solicitudes/vistas/validar_solicitud";
+                            window.location.href = "<?= neiva_app_url('Arbimaps/index.php?page=baqueanos/solicitudes/vistas/validar_solicitud') ?>";
                         });
                     } else {
                         Swal.fire("Error", data.message, "error");

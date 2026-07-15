@@ -73,11 +73,11 @@ function ajustarRutaDocumento($rutaBD)
     if (empty($rutaBD)) {
         return [null, null];
     }
-    $prefijoCorrecto = "/arbimaps/Arbimaps/vistas/Personal/";
+    $prefijoCorrecto = neiva_app_url('Arbimaps/vistas/Personal/');
     if (strpos($rutaBD, $prefijoCorrecto) === 0) {
         $rutaWeb = $rutaBD;
     } else {
-        $prefijoViejo = "/arbimaps/Arbimaps/";
+        $prefijoViejo = neiva_app_url('Arbimaps/');
         if (strpos($rutaBD, $prefijoViejo) === 0) {
             $rutaBD = substr($rutaBD, strlen($prefijoViejo));
         }

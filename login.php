@@ -4,7 +4,7 @@ neiva_bootstrap();
 require __DIR__ . '/conexion.php';
 
 if (neiva_is_authenticated()) {
-    header('Location: ' . neiva_app_base_url() . '/Arbimaps/index.php?page=dashboardcopy', true, 302);
+    header('Location: ' . neiva_dashboard_url(), true, 302);
     exit;
 }
 
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['rol_usuario_dos'] = $row['rol_usuario_dos'];
                 $_SESSION['cedula_usuario'] = $row['cedula_usuario'];
                 $_SESSION['foto_user'] = !empty($row['foto_user']) ? $row['foto_user'] : '';
-                header('Location: ' . neiva_app_base_url() . '/Arbimaps/index.php?page=dashboardcopy', true, 302);
+                header('Location: ' . neiva_dashboard_url(), true, 302);
                 exit();
             } else {
                 $mensaje = "Contraseña incorrecta";

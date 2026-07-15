@@ -618,7 +618,7 @@ if ($resultado2->num_rows > 0) {
                                     .then(response => response.json())
                                     .then(data => {
                                         if (data.success) {
-                                            var redirectUrl = data.redirect ? data.redirect : '/arbimaps/Arbimaps/index.php?page=cuentas/radicar_cuenta';
+                                            var redirectUrl = data.redirect ? data.redirect : '<?= neiva_app_url('Arbimaps/index.php?page=cuentas/radicar_cuenta') ?>';
                                             window.location.href = redirectUrl;
                                         } else {
                                             Swal.fire({

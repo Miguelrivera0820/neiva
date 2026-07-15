@@ -174,7 +174,7 @@ function guardarArchivoWeb($archivo, $carpetaFisica, $carpetaWeb, $soloImagen = 
 $con_nombres       = trim((string)$data['con_nombres']);
 $con_num_identidad = trim((string)$data['con_num_identidad']);
 
-$baseWeb    = "/arbimaps/Arbimaps/vistas/Personal/Arbitrium_personal/";
+$baseWeb    = neiva_app_url('Arbimaps/vistas/Personal/Arbitrium_personal/');
 $baseFisica = rtrim((string)($_SERVER['DOCUMENT_ROOT'] ?? ''), '/\\') . $baseWeb;
 
 $carpetaRel          = $con_num_identidad . '_' . $con_nombres . '/';

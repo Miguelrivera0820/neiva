@@ -34,7 +34,7 @@ if (!$info) {
   <div class="card shadow">
     <div class="card-body">
 
-      <form id="formCierre" action="/arbimaps/Arbimaps/vistas/Licitaciones/procesar_cierre.php" method="POST" enctype="multipart/form-data">
+      <form id="formCierre" action="<?= neiva_app_url('Arbimaps/vistas/Licitaciones/procesar_cierre.php') ?>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="radicado" value="<?php echo htmlspecialchars($radicado); ?>">
 
         <div class="mb-3">
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
           text: data.message || 'Cierre guardado con éxito.',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          window.location.href = "/arbimaps/Arbimaps/index.php?page=licitaciones/consultar_licitaciones";
+          window.location.href = "<?= neiva_app_url('Arbimaps/index.php?page=licitaciones/consultar_licitaciones') ?>";
         });
       } else {
         Swal.fire({

@@ -85,11 +85,11 @@ $yaHayNotifFirmada = false;
 
 if ($cedula !== '') {
     $carpetaCedulaFS = rtrim($_SERVER['DOCUMENT_ROOT'], '/') .
-        '/arbimaps/Arbimaps/vistas/Personal/Arbitrium_otrosi_Nuevo/notificacion_firmada/' .
+        neiva_app_url('Arbimaps/vistas/Personal/Arbitrium_otrosi_Nuevo/notificacion_firmada/') .
         $cedula . '/';
 
     $carpetaSolicitudFS = $carpetaCedulaFS . $solicitud['id'] . '/';
-    $urlNotifBase = '/arbimaps/Arbimaps/vistas/Personal/Arbitrium_otrosi_Nuevo/notificacion_firmada/';
+    $urlNotifBase = neiva_app_url('Arbimaps/vistas/Personal/Arbitrium_otrosi_Nuevo/notificacion_firmada/');
 
     if (is_dir($carpetaSolicitudFS)) {
         $archivos = glob($carpetaSolicitudFS . '*.pdf');
@@ -227,7 +227,7 @@ if (!empty($_SESSION['swal_rechazado_ok'])) {
 
                                         </div>
 
-                                        <img src="../Arbimaps/assets/img/jefe.png" style="width: 10em; height:12em" alt="imagen de jefe">
+                                        <img src="..<?= neiva_app_url('Arbimaps/assets/img/jefe.png') ?>" style="width: 10em; height:12em" alt="imagen de jefe">
 
                                     </div>
                                 </div>
@@ -237,7 +237,7 @@ if (!empty($_SESSION['swal_rechazado_ok'])) {
                                         <div class="row justify-content-center">
                                             <?php if (!empty($solicitud['sol_archivo_otrosi'])): ?>
                                                 <?php
-                                                $carpetaBase = '/arbimaps/Arbimaps/vistas/Personal/Arbitrium_otrosi_Nuevo/documentos_firmados/';
+                                                $carpetaBase = neiva_app_url('Arbimaps/vistas/Personal/Arbitrium_otrosi_Nuevo/documentos_firmados/');
                                                 $cedula      = $solicitud['con_num_identidad'];
                                                 $archivoPdf  = $solicitud['sol_archivo_otrosi'];
                                                 $rutaPdf     = $carpetaBase . $cedula . '/' . $archivoPdf;
@@ -362,7 +362,7 @@ if (!empty($_SESSION['swal_rechazado_ok'])) {
                                                                     Cargar documento de otro si firmado
                                                                 </h6>
 
-                                                                <form action="/arbimaps/Arbimaps/vistas/Personal/acciones/otrosi_subir_archivo.php"
+                                                                <form action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/otrosi_subir_archivo.php') ?>"
                                                                     method="post" enctype="multipart/form-data" class="row g-3">
                                                                     <input type="hidden" name="solicitud_id" value="<?php echo (int)$solicitud['id']; ?>">
                                                                     <input type="hidden" name="usuario_id" value="<?php echo (int)$idUsuario; ?>">
@@ -524,7 +524,7 @@ if (!empty($_SESSION['swal_rechazado_ok'])) {
                                 <div class="rounded-3 p-3 pb-0 d-flex justify-content-between align-items-center mt-3">
                                     <form id="form-aprobar"
                                         method="post"
-                                        action="/arbimaps/Arbimaps/vistas/Personal/acciones/aprobar_notificacion.php"
+                                        action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/aprobar_notificacion.php') ?>"
                                         class="w-100 px-2">
 
                                         <input type="hidden" name="id" value="<?php echo (int)$solicitud['id']; ?>">
@@ -538,7 +538,7 @@ if (!empty($_SESSION['swal_rechazado_ok'])) {
 
                                     <form id="form-rechazar"
                                         method="post"
-                                        action="/arbimaps/Arbimaps/vistas/Personal/acciones/rechazo_notificacion.php"
+                                        action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/rechazo_notificacion.php') ?>"
                                         class="w-100 px-2">
 
                                         <input type="hidden" name="id" value="<?php echo (int)$solicitud['id']; ?>">
@@ -765,7 +765,7 @@ if (!empty($_SESSION['swal_rechazado_ok'])) {
                         </div>
                         <?php if (!empty($solicitud['sol_archivo_otrosi'])): ?>
                             <?php
-                            $carpetaBase = '/arbimaps/Arbimaps/vistas/Personal/Arbitrium_otrosi_Nuevo/documentos_firmados/';
+                            $carpetaBase = neiva_app_url('Arbimaps/vistas/Personal/Arbitrium_otrosi_Nuevo/documentos_firmados/');
                             $cedula      = $solicitud['con_num_identidad'];
                             $archivoPdf  = $solicitud['sol_archivo_otrosi'];
                             $rutaPdf     = $carpetaBase . $cedula . '/' . $archivoPdf;
@@ -862,7 +862,7 @@ if (!empty($_SESSION['swal_rechazado_ok'])) {
                                         <h6 class="fw-semibold mb-3" style="color:#002F55;">
                                             <i class="bi bi-upload me-2"></i> Cargar / actualizar documento de OTROSI
                                         </h6>
-                                        <form action="/arbimaps/Arbimaps/vistas/Personal/acciones/otrosi_subir_archivo.php"
+                                        <form action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/otrosi_subir_archivo.php') ?>"
                                             method="post" enctype="multipart/form-data" class="row g-3">
                                             <input type="hidden" name="solicitud_id" value="<?php echo (int)$solicitud['id']; ?>">
                                             <input type="hidden" name="usuario_id" value="<?php echo (int)$idUsuario; ?>">
@@ -887,7 +887,7 @@ if (!empty($_SESSION['swal_rechazado_ok'])) {
                             <div class="border rounded-3 p-3 d-flex justify-content-between align-items-center flex-wrap gap-3">
                                 <form id="form-aprobar"
                                     method="post"
-                                    action="/arbimaps/Arbimaps/vistas/Personal/acciones/aprobar_notificacion.php"
+                                    action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/aprobar_notificacion.php') ?>"
                                     class="me-3">
                                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($solicitud['id']); ?>">
                                     <input type="hidden" name="numero_identidad" value="<?php echo htmlspecialchars($solicitud['con_num_identidad'] ?? ''); ?>">
@@ -898,7 +898,7 @@ if (!empty($_SESSION['swal_rechazado_ok'])) {
 
                                 <form id="form-rechazar"
                                     method="post"
-                                    action="/arbimaps/Arbimaps/vistas/Personal/acciones/rechazo_notificacion.php"
+                                    action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/rechazo_notificacion.php') ?>"
                                     class="me-3">
                                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($solicitud['id']); ?>">
                                     <input type="hidden" name="numero_identidad" value="<?php echo htmlspecialchars($solicitud['con_num_identidad'] ?? ''); ?>">

@@ -169,7 +169,7 @@
             
             <!-- FORMULARIO PRINCIPAL -->
             <form id="formLicitaciones"
-                action="/arbimaps/Arbimaps/vistas/Licitaciones/guardar_licitaciones.php"
+                action="<?= neiva_app_url('Arbimaps/vistas/Licitaciones/guardar_licitaciones.php') ?>"
                 method="POST"
                 enctype="multipart/form-data">
 
@@ -628,7 +628,7 @@ function agregarArchivos(files) {
                         text: data.message || 'La información se guardó correctamente.',
                         confirmButtonText: 'Ir a consulta'
                     }).then(() => {
-                        window.location.href = "/arbimaps/Arbimaps/index.php?page=licitaciones/consultar_licitaciones";
+                        window.location.href = "<?= neiva_app_url('Arbimaps/index.php?page=licitaciones/consultar_licitaciones') ?>";
                     });
                 } else {
                     Swal.fire({

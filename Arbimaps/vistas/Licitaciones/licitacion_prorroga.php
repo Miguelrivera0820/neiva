@@ -55,7 +55,7 @@ $fechaPresentacion = !empty($info['lc_fecha_presentacion']) ? date('Y-m-d', strt
   <div class="card shadow">
     <div class="card-body">
 
-      <form id="formCierre" action="/arbimaps/Arbimaps/vistas/Licitaciones/procesar_cierre_prorroga.php" method="POST" enctype="multipart/form-data">
+      <form id="formCierre" action="<?= neiva_app_url('Arbimaps/vistas/Licitaciones/procesar_cierre_prorroga.php') ?>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="radicado" value="<?php echo htmlspecialchars($radicado); ?>">
 
         <div class="row g-3">
@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   if (RADICADO) {
-    fetch(`/arbimaps/Arbimaps/vistas/Licitaciones/get_documentos_licitacion.php?radicado=${encodeURIComponent(RADICADO)}`)
+    fetch(`<?= neiva_app_url('Arbimaps/vistas/Licitaciones/get_documentos_licitacion.php?radicado=') ?>${encodeURIComponent(RADICADO)}`)
       .then(r => r.json())
       .then(data => {
         if (!data.success) return;
@@ -454,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (data.success) {
           Swal.fire({ icon: 'success', title: 'Guardado', text: data.message || 'Guardado con éxito.' })
-            .then(() => window.location.href = "/arbimaps/Arbimaps/index.php?page=licitaciones/consultar_licitaciones");
+            .then(() => window.location.href = "<?= neiva_app_url('Arbimaps/index.php?page=licitaciones/consultar_licitaciones') ?>");
         } else {
           Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Ocurrió un error.' });
         }

@@ -1,6 +1,6 @@
 <?php
-define('APP_WEB_BASE', '/Arbimaps');
-define('APP_FS_BASE', rtrim($_SERVER['DOCUMENT_ROOT'], '/\\') . APP_WEB_BASE);
+define('APP_WEB_BASE', neiva_app_base_path() . '/Arbimaps');
+define('APP_FS_BASE', neiva_public_path('Arbimaps'));
 
 
 function web_encode_path($path)

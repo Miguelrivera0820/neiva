@@ -36,7 +36,7 @@ if (!$lc) {
     <div class="card-body p-3 mb-3">
 
       <form id="formLicitaciones"
-            action="/arbimaps/Arbimaps/vistas/licitaciones/actualizar_licitacion.php"
+            action="<?= neiva_app_url('Arbimaps/vistas/licitaciones/actualizar_licitacion.php') ?>"
             method="POST"
             enctype="multipart/form-data">
 

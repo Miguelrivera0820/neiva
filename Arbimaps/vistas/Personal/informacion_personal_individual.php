@@ -114,12 +114,12 @@ function ajustarRutaDocumento($rutaBD)
     if (empty($rutaBD)) return [null, null];
 
     $rutaBD = str_replace('\\', '/', $rutaBD);
-    $prefijoCorrecto = "/arbimaps/Arbimaps/vistas/Personal/";
+    $prefijoCorrecto = neiva_app_url('Arbimaps/vistas/Personal/');
 
     if (strpos($rutaBD, $prefijoCorrecto) === 0) {
         $rutaWeb = $rutaBD;
     } else {
-        $prefijoViejo = "/arbimaps/Arbimaps/";
+        $prefijoViejo = neiva_app_url('Arbimaps/');
         if (strpos($rutaBD, $prefijoViejo) === 0) {
             $rutaBD = substr($rutaBD, strlen($prefijoViejo));
         }
@@ -1936,7 +1936,7 @@ function ajustarRutaDocumento($rutaBD)
                         <div class="col-md-4 p-1 px-2 my-2 text-center">
                             <label for="con_jefe" class="form-label fw-bold" style="font-size:0.9em;">Otro si</label>
                             <div class="input-group border">
-                                <a href="/arbimaps/Arbimaps/index.php?page=Personal/ver_otrosi&con_id=<?php echo urlencode($row['con_id']); ?>&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
+                                <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/ver_otrosi&con_id=') ?><?php echo urlencode($row['con_id']); ?>&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
                                     class="btn text-white w-100" style="background-color: #002F55; border:1px solid #002F55">
                                     <i class="bi bi-file-pdf me-2"></i> Ver documentos
                                 </a>
@@ -1945,7 +1945,7 @@ function ajustarRutaDocumento($rutaBD)
                         <div class="col-md-4 p-1 px-2 my-2 text-center">
                             <label for="con_jefe" class="form-label fw-bold" style="font-size:0.9em;">Titulos Profesionales</label>
                             <div class="input-group ">
-                                <a href="/arbimaps/Arbimaps/index.php?page=Personal/ver_estudios&con_id=<?php echo urlencode($row['con_id']); ?>&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
+                                <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/ver_estudios&con_id=') ?><?php echo urlencode($row['con_id']); ?>&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
                                     class="btn text-white w-100" style="background-color: #002F55; border:1px solid #002F55">
                                     <i class="bi bi-file-pdf me-2"></i> Ver documentos
                                 </a>

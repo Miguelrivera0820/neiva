@@ -1,100 +1,68 @@
 # ARBIMaps Neiva
 
-Aplicación PHP/MySQL para gestión catastral y operativa de Neiva. El proyecto funciona sobre XAMPP/PHP 8.2 y concentra módulos de trámites, seguimiento, soporte, usuarios, certificados, restricciones de predios y gestión de personal.
+Aplicación PHP/MySQL para gestión catastral y operativa de la ciudad de Neiva. El proyecto funciona sobre PHP 8.2 y concentra módulos de trámites, seguimiento, soporte, usuarios, certificados catastrales, restricciones de predios y gestión de personal.
 
-## Estado
+---
 
-El sistema está en proceso de endurecimiento de seguridad. Este repositorio no debe publicarse sin saneamiento previo de datos, documentos y configuraciones locales.
+## Estado y Seguridad
 
-## Módulos principales
+El sistema cuenta con una arquitectura de seguridad endurecida:
+- **Centralización de Configuración:** Toda configuración sensible (credenciales, URLs base, rutas de almacenamiento y zona horaria) se carga desde el archivo `.env` mediante `Arbimaps/includes/bootstrap.php`.
+- **Sesiones Seguras:** La sesión del sistema (`NEIVASESSID`) se inicializa automáticamente y de forma segura configurando los flags `HttpOnly`, `Secure` y `SameSite=Lax` para mitigar ataques CSRF y XSS.
+- **Rutas Dinámicas:** No existen rutas locales absolutas hardcodeadas ni dependencias rígidas de aliases `/arbimaps`. Toda URL y path local se calcula en runtime.
 
-- `Arbimaps/`: núcleo de la aplicación y router principal.
-- `vistas/tramites/`: radicación, asignación, revisión y cierre de trámites.
-- `vistas/seguimiento/`: devoluciones, entregas, subsanaciones y resoluciones.
-- `vistas/soporte/`: tickets, chat y mesa de ayuda.
-- `vistas/Usuarios/`: administración de usuarios.
-- `vistas/Personal/`: perfiles, contratación, otrosí y aprobaciones.
-- `vistas/baqueanos/`: solicitudes y cuentas del flujo de baqueanos.
+---
 
-## Requisitos
+## Estructura y Helpers Principales
+
+El archivo central de inicialización es [bootstrap.php](file:///c:/xampp/htdocs/neiva/Arbimaps/includes/bootstrap.php). Este provee las siguientes utilidades globales:
+
+### Resolutores de Rutas y Archivos
+- `neiva_public_path(string $relativePath = '')`: Retorna la ruta física absoluta dentro de la raíz pública del proyecto.
+- `neiva_private_path(string $relativePath = '')`: Retorna la ruta física absoluta dentro del almacenamiento privado y seguro.
+- `neiva_temp_path(string $relativePath = '')`: Retorna la ruta física absoluta dentro del directorio de archivos temporales.
+- `neiva_document_path(string $relativePath = '')`: Retorna la ruta física absoluta dentro de la carpeta de documentos y soportes del sistema.
+
+### URLs y Redirecciones
+- `neiva_app_base_url()`: Retorna la URL base configurada (o autodetectada).
+- `neiva_app_url(string $path = '')`: Genera una URL absoluta y limpia hacia cualquier recurso del sistema.
+- `neiva_redirect(string $url)`: Redirige al navegador de forma segura resolviendo URLs dinámicas y finaliza la ejecución del script inmediatamente.
+
+---
+
+## Requisitos del Sistema
 
 - PHP 8.2+
 - MySQL/MariaDB
-- Apache
-- Extensión PHP `zip`
+- Apache 2.4+ (con `mod_rewrite` habilitado)
 - Composer
-- Node.js/npm solo si se van a usar tareas frontend heredadas
 
-## Variables de entorno
+---
 
-Crear un archivo `.env` local a partir de `.env.example`.
+## Guía de Instalación y Despliegue
 
-Variables usadas actualmente:
+La documentación detallada para realizar una instalación desde cero en entornos locales, guías de permisos de carpetas y listas de verificación de paso a servidores de producción se encuentra en:
 
-- `APP_ENV`
-- `APP_BASE_URL`
-- `PRIVATE_STORAGE_PATH`
-- `DB_HOST`
-- `DB_NAME`
-- `DB_USER`
-- `DB_PASSWORD`
+👉 [**Guía de Despliegue Seguro (DEPLOYMENT.md)**](file:///c:/xampp/htdocs/neiva/DEPLOYMENT.md)
 
-## Instalación local
+---
 
-1. Clonar o copiar el proyecto dentro de `C:\xampp\htdocs\neiva`.
-2. Crear `.env` a partir de `.env.example`.
-3. Instalar dependencias PHP:
+## Comandos de Mantenimiento y Auditoría
 
+### Auditoría de Contraseñas
+Ejecuta un reporte de la base de datos para identificar usuarios cuyas contraseñas no utilicen hashes modernos:
 ```bash
-composer install
+C:\xampp\php\php.exe scripts/audit_passwords.php
 ```
 
-4. Restaurar una base de datos de desarrollo segura.
-5. Verificar que Apache sirva el proyecto en una URL equivalente a `http://localhost/neiva`.
-
-## Arranque
-
-La autenticación pública entra por:
-
-- `login.php`
-
-El panel interno usa:
-
-- `Arbimaps/index.php`
-
-## Seguridad y publicación
-
-Antes de subir este proyecto a GitHub:
-
-- No incluir `.env`, dumps `.sql`, logs ni respaldos.
-- No incluir `dat_neiva/`, `tramites_conservacion/`, `uploads/`, `tmp/` ni documentos generados.
-- No incluir `vendor/` ni `node_modules/`.
-- Confirmar que no existan credenciales, IPs internas o datos reales incrustados en el código.
-- Mantener el repositorio como `private` hasta terminar el saneamiento.
-
-## Dependencias backend
-
-El proyecto usa Composer para, al menos:
-
-- `phpoffice/phpspreadsheet`
-- `dompdf/dompdf`
-
-## Validaciones útiles
-
-Sintaxis PHP:
-
+### Auditoría de Seguridad (Fase 4)
+Escanea el código fuente buscando posibles secretos duros, referencias locales absolutas obsoletas o sesiones manuales:
 ```bash
-C:\xampp\php\php.exe -l ruta\archivo.php
+C:\xampp\php\php.exe scripts/audit_phase4.php
 ```
 
-Auditoría de contraseñas:
-
+### Corrección Automática de Rutas Heredadas
+Sanea y reemplaza URLs antiguas `/arbimaps` o `/Arbimaps` por el helper `neiva_app_url()` dinámico:
 ```bash
-C:\xampp\php\php.exe scripts\audit_passwords.php
+C:\xampp\php\php.exe scripts/fix_phase4_paths.php --write
 ```
-
-## Notas
-
-- El `README` anterior del template SB Admin 2 ya no describe este proyecto.
-- La estructura aún contiene módulos legacy y deuda técnica en proceso de remediación.
-- El endurecimiento en curso está documentado en `PLAN_REMEDIACION_NEIVA_2026-07-14.md`.

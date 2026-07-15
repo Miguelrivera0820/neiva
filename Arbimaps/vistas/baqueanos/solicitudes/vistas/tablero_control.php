@@ -999,7 +999,7 @@ $k = $data["kpis"];
             </form>
 
             <a href="index.php" class="brand-float" aria-label="Ir al inicio">
-                <img src="/arbimaps/Arbimaps/assets/img/logocompleto.png" alt="Logo" class="card-logo">
+                <img src="<?= neiva_app_url('Arbimaps/assets/img/logocompleto.png') ?>" alt="Logo" class="card-logo">
             </a>
 
         </div>

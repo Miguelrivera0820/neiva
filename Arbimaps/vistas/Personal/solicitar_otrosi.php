@@ -207,7 +207,7 @@ $valorFormateado = '$ ' . number_format($con_salario, 0, ',', '.');
                 <b>Cantidad de Otro Sí: </b> <?php echo $cantidad_otrosi; ?>
             </div>
 
-            <form id="multiStepForm" method="POST" action="/arbimaps/Arbimaps/vistas/Personal/solicitud_otrosi_guardar.php">
+            <form id="multiStepForm" method="POST" action="<?= neiva_app_url('Arbimaps/vistas/Personal/solicitud_otrosi_guardar.php') ?>">
                 <div class="row">
                     <!-- Datos básicos -->
                     <div class="col-md-3 col-sm-6 mb-3">
@@ -653,7 +653,7 @@ $valorFormateado = '$ ' . number_format($con_salario, 0, ',', '.');
                                 confirmButtonText: 'Entendido'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    window.location.href = '/arbimaps/Arbimaps/index.php?page=Personal/personal_activo';
+                                    window.location.href = '<?= neiva_app_url('Arbimaps/index.php?page=Personal/personal_activo') ?>';
                                 }
                             });
                         }

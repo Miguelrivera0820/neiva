@@ -204,11 +204,11 @@ function ajustarRutaDocumento($rutaBD)
     if (empty($rutaBD)) {
         return [null, null];
     }
-    $prefijoCorrecto = "/arbimaps/Arbimaps/vistas/Personal/";
+    $prefijoCorrecto = neiva_app_url('Arbimaps/vistas/Personal/');
     if (strpos($rutaBD, $prefijoCorrecto) === 0) {
         $rutaWeb = $rutaBD;
     } else {
-        $prefijoViejo = "/arbimaps/Arbimaps/";
+        $prefijoViejo = neiva_app_url('Arbimaps/');
         if (strpos($rutaBD, $prefijoViejo) === 0) {
             $rutaBD = substr($rutaBD, strlen($prefijoViejo));
         }
@@ -767,7 +767,7 @@ function renderDocumentoCampoCol($label, $valorBD, $collapseId, $inputName, $col
         </div>
 
         <div class="card-body ">
-            <form id="formContratacion" action="/arbimaps/Arbimaps/vistas/Personal/acciones/agregar_perfil_contratacion.php" method="POST" enctype="multipart/form-data" novalidate>
+            <form id="formContratacion" action="<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/agregar_perfil_contratacion.php') ?>" method="POST" enctype="multipart/form-data" novalidate>
                 <input type="hidden" name="origen" value="<?php echo !empty($row['con_id']) ? 'editar' : 'crear'; ?>">
                 <div class="form-section" id="section1">
 
@@ -1708,7 +1708,7 @@ function renderDocumentoCampoCol($label, $valorBD, $collapseId, $inputName, $col
                         <div class="col-md-4 p-1 px-2 my-2 text-center">
                             <label class="form-label fw-bold" style="font-size:0.9em;">Otro si</label>
                             <div class="input-group border">
-                                <a href="/Arbimaps/index.php?page=Personal/ver_otrosi&con_id=<?php echo urlencode($row['con_id']); ?>&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
+                                <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/ver_otrosi&con_id=') ?><?php echo urlencode($row['con_id']); ?>&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
                                     class="btn text-white w-100" style="background-color: #002F55; border:1px solid #002F55">
                                     <i class="bi bi-file-pdf me-2"></i> Ver documentos
                                 </a>
@@ -1718,7 +1718,7 @@ function renderDocumentoCampoCol($label, $valorBD, $collapseId, $inputName, $col
                         <div class="col-md-4 p-1 px-2 my-2 text-center">
                             <label class="form-label fw-bold" style="font-size:0.9em;">Titulos Profesionales</label>
                             <div class="input-group ">
-                                <a href="/Arbimaps/index.php?page=Personal/ver_estudios&con_id=<?php echo urlencode($row['con_id']); ?>&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
+                                <a href="<?= neiva_app_url('Arbimaps/index.php?page=Personal/ver_estudios&con_id=') ?><?php echo urlencode($row['con_id']); ?>&con_num_identidad=<?php echo urlencode($row['con_num_identidad']); ?>"
                                     class="btn text-white w-100" style="background-color: #002F55; border:1px solid #002F55">
                                     <i class="bi bi-file-pdf me-2"></i> Ver documentos
                                 </a>
@@ -1967,7 +1967,7 @@ function renderDocumentoCampoCol($label, $valorBD, $collapseId, $inputName, $col
 
         function urlVolverEditar() {
             const cedula = document.getElementById('con_num_identidad')?.value || '';
-            return '/arbimaps/Arbimaps/index.php?page=Perfil/vistas/editar_perfil_contratacion' +
+            return '<?= neiva_app_url('Arbimaps/index.php?page=Perfil/vistas/editar_perfil_contratacion') ?>' +
                 '&con_num_identidad=' + encodeURIComponent(cedula);
         }
 
@@ -2029,7 +2029,7 @@ function renderDocumentoCampoCol($label, $valorBD, $collapseId, $inputName, $col
                 `,
                 didOpen: () => {
                     document.getElementById('swalInv')?.addEventListener('click', () => {
-                        window.location.href = '/arbimaps/Arbimaps/index.php?page=Personal/personal_activo';
+                        window.location.href = '<?= neiva_app_url('Arbimaps/index.php?page=Personal/personal_activo') ?>';
                     });
                 }
             });

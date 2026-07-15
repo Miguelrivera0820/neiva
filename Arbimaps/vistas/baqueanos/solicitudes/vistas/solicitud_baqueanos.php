@@ -1,5 +1,6 @@
-<?php
-date_default_timezone_set('America/Bogota');
+﻿<?php
+require_once dirname(__DIR__, 4) . '/includes/bootstrap.php';
+neiva_configure_runtime();
 
 $diaSemana = date('N');
 
@@ -91,13 +92,13 @@ if (!in_array($diaSemana, [1, 2])) {
                 Acceso restringido temporalmente
             </div>
             <div class="lock-text">
-                Las solicitudes de baqueanos solo pueden realizarse los días 
+                Las solicitudes de baqueanos solo pueden realizarse los dÃ­as 
                 <strong>lunes y martes</strong> como parte del control operativo semanal.
                 <br><br>
                 Intenta nuevamente la proxima semana para continuar con el proceso.
             </div>
             <div class="lock-badge">
-                Disponible únicamente los lunes y martes
+                Disponible Ãºnicamente los lunes y martes
             </div>
         </div>
     </div>
@@ -357,7 +358,7 @@ if (!in_array($diaSemana, [1, 2])) {
                         <i class="bi bi-person-circle me-3 fs-2"></i>
                         <div>
                             <h3 class="h5 mb-1">Datos Generales</h3>
-                            <p class="mb-0" style="font-size: 0.85rem; color:#999999">Información básica de la solicitud.</p>
+                            <p class="mb-0" style="font-size: 0.85rem; color:#999999">InformaciÃ³n bÃ¡sica de la solicitud.</p>
                         </div>
                     </div>
 
@@ -368,8 +369,8 @@ if (!in_array($diaSemana, [1, 2])) {
                                 <label class="input-group-text" for="sb_tipo_documento"><i class="bi bi-credit-card-2-front"></i></label>
                                 <select class="form-select" style="font-size: 0.9rem;" id="sb_tipo_documento" name="sb_tipo_documento" required>
                                     <option value="" disabled selected><b>SELECCIONE</b></option>
-                                    <option value="Cedula_Ciudadania">Cédula de Ciudadanía</option>
-                                    <option value="Cedula_Extranjeria">Cédula de Extranjería</option>
+                                    <option value="Cedula_Ciudadania">CÃ©dula de CiudadanÃ­a</option>
+                                    <option value="Cedula_Extranjeria">CÃ©dula de ExtranjerÃ­a</option>
                                     <option value="NIT">N.I.T.</option>
                                     <option value="Pasaporte">Pasaporte</option>
                                 </select>
@@ -377,11 +378,11 @@ if (!in_array($diaSemana, [1, 2])) {
                         </div>
 
                         <div class="col-md-4 p-1 px-2 my-2">
-                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_numero_identidad">Número Documento de Identidad</label>
+                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_numero_identidad">NÃºmero Documento de Identidad</label>
                             <div class="input-group">
                                 <span class="input-group-text shadow-sm"><i class="bi bi-person-vcard"></i></span>
                                 <input class="form-control shadow-sm" style="font-size:0.9em;" id="sb_numero_identidad" name="sb_numero_identidad" type="number"
-                                    placeholder="Ingrese Número de Identidad.." maxlength="10"
+                                    placeholder="Ingrese NÃºmero de Identidad.." maxlength="10"
                                     oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)" required>
                             </div>
                         </div>
@@ -405,16 +406,16 @@ if (!in_array($diaSemana, [1, 2])) {
                         </div>
 
                         <div class="col-md-4 p-1 px-2 my-2">
-                            <label class="form-label fw-bold" for="sb_telefono_baqueano" style="font-size:0.9em;">Número Telefónico</label>
+                            <label class="form-label fw-bold" for="sb_telefono_baqueano" style="font-size:0.9em;">NÃºmero TelefÃ³nico</label>
                             <div class="input-group">
                                 <span class="input-group-text shadow-sm"><i class="bi bi-person-raised-hand"></i></span>
                                 <input class="form-control shadow-sm" id="sb_telefono_baqueano" name="sb_telefono_baqueano" type="tel"
-                                    placeholder="Ingrese Número Telefónico..." required>
+                                    placeholder="Ingrese NÃºmero TelefÃ³nico..." required>
                             </div>
                         </div>
 
                         <div class="col-md-4 p-1 px-2 my-2">
-                            <label for="sb_correo_baqueano" class="form-label fw-bold" style="font-size:0.9em;">Correo Electrónico</label>
+                            <label for="sb_correo_baqueano" class="form-label fw-bold" style="font-size:0.9em;">Correo ElectrÃ³nico</label>
                             <div class="input-group shadow-sm">
                                 <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
                                 <input type="email" class="form-control" id="sb_correo_baqueano" placeholder="Ingrese el correo electronico..."
@@ -424,11 +425,11 @@ if (!in_array($diaSemana, [1, 2])) {
 
                         <div class="row justify-content-center">
                             <div class="col-md-4 p-1 px-2 my-2">
-                                <label for="sb_direccion" class="form-label fw-bold" style="font-size:0.9em;">Dirección</label>
+                                <label for="sb_direccion" class="form-label fw-bold" style="font-size:0.9em;">DirecciÃ³n</label>
                                 <div class="input-group">
                                     <span class="input-group-text shadow-sm"><i class="bi bi-geo-alt"></i></span>
                                     <input type="text" class="form-control shadow-sm" style="font-size:0.9em;" id="sb_direccion"
-                                        name="sb_direccion" placeholder="Ingrese la dirección..." required>
+                                        name="sb_direccion" placeholder="Ingrese la direcciÃ³n..." required>
                                 </div>
                             </div>
                         </div>
@@ -437,7 +438,7 @@ if (!in_array($diaSemana, [1, 2])) {
 
                         <div class="col-12 mt-0">
                             <h6 class="fw-bold p-2 text-white text-center w-25 rounded-3" style="background-color: #002F55;">
-                                Información Financiera
+                                InformaciÃ³n Financiera
                             </h6>
                         </div>
 
@@ -485,9 +486,9 @@ if (!in_array($diaSemana, [1, 2])) {
                             </div>
                         </div>
 
-                        <!-- Nº Cuenta -->
+                        <!-- NÂº Cuenta -->
                         <div class="col-md-4 p-1 px-2 my-2">
-                            <label for="sb_num_cuenta" class="form-label fw-bold" style="font-size:0.9em;">Nº Cuenta Bancaria</label>
+                            <label for="sb_num_cuenta" class="form-label fw-bold" style="font-size:0.9em;">NÂº Cuenta Bancaria</label>
                             <div class="input-group shadow-sm">
                                 <span class="input-group-text"><i class="bi bi-bank"></i></span>
                                 <input type="text" class="form-control shadow-sm" style="font-size:0.9em;" id="sb_num_cuenta" name="sb_num_cuenta"
@@ -521,7 +522,7 @@ if (!in_array($diaSemana, [1, 2])) {
                         <i class="bi bi-person-circle me-3 fs-2"></i>
                         <div>
                             <h3 class="h5 mb-1">Plan de Trabajo</h3>
-                            <p class="mb-0" style="font-size: 0.85rem; color:#999999">Información del plan de trabajo a desarrollar.</p>
+                            <p class="mb-0" style="font-size: 0.85rem; color:#999999">InformaciÃ³n del plan de trabajo a desarrollar.</p>
                         </div>
                     </div>
 
@@ -545,7 +546,7 @@ if (!in_array($diaSemana, [1, 2])) {
                         </div>
 
                         <div class="col-md-4 p-1 px-2 my-2">
-                            <label class="form-label fw-bold" for="sb_year_select" style="font-size:0.9em;">Año</label>
+                            <label class="form-label fw-bold" for="sb_year_select" style="font-size:0.9em;">AÃ±o</label>
                             <div class="input-group shadow-sm">
                                 <label class="input-group-text" for="sb_year_select"><i class="bi bi-calendar3"></i></label>
                                 <select class="form-select" id="sb_year_select" name="sb_year_select" style="font-size:0.9em;" disabled>
@@ -575,20 +576,20 @@ if (!in_array($diaSemana, [1, 2])) {
                         </div>
 
                         <div class="col-md-4 p-1 px-2 my-2">
-                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_dias_calculados">Total de Días</label>
+                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_dias_calculados">Total de DÃ­as</label>
                             <div class="input-group">
                                 <span class="input-group-text shadow-sm"><i class="bi bi-person-workspace"></i></span>
                                 <input class="form-control shadow-sm" style="font-size:0.9em;" id="sb_dias_calculados"
-                                    placeholder="Se calcula automáticamente" name="sb_dias_calculados" type="text" readonly>
+                                    placeholder="Se calcula automÃ¡ticamente" name="sb_dias_calculados" type="text" readonly>
                             </div>
                         </div>
 
                         <div class="col-md-4 p-1 px-2 my-2">
-                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_cobro_diario">Valor a Cobrar por Día</label>
+                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_cobro_diario">Valor a Cobrar por DÃ­a</label>
                             <div class="input-group shadow-sm">
                                 <span class="input-group-text shadow-sm bg-warning border border-warning"><i class="bi bi-cash-coin"></i></span>
                                 <input type="text" class="form-control border border-warning" id="sb_cobro_diario_view"
-                                    placeholder="Ingrese el valor por día">
+                                    placeholder="Ingrese el valor por dÃ­a">
 
                                 <input type="hidden" id="sb_cobro_diario" name="sb_cobro_diario" value="">
                             </div>
@@ -598,7 +599,7 @@ if (!in_array($diaSemana, [1, 2])) {
                             <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_valor_cobrar_visible">Total a Cobrar</label>
                             <div class="input-group">
                                 <span class="input-group-text shadow-sm"><i class="bi bi-piggy-bank"></i></span>
-                                <input class="form-control shadow-sm" style="font-size:0.9em;" placeholder="Se calcula automáticamente"
+                                <input class="form-control shadow-sm" style="font-size:0.9em;" placeholder="Se calcula automÃ¡ticamente"
                                     id="sb_valor_cobrar_visible" readonly>
                             </div>
                         </div>
@@ -606,7 +607,7 @@ if (!in_array($diaSemana, [1, 2])) {
 
                         <div class="col-md-4 p-1 px-2 my-2">
                             <label for="sb_unidad_intervencion" class="form-label fw-bold" style="font-size:0.9em;">
-                                Unidad de Intervención
+                                Unidad de IntervenciÃ³n
                             </label>
 
                             <div class="input-group">
@@ -615,7 +616,7 @@ if (!in_array($diaSemana, [1, 2])) {
                                     class="form-control shadow-sm"
                                     style="font-size:0.9em;"
                                     id="sb_unidad_intervencion"
-                                    placeholder="Ingrese la unidad de intervención"
+                                    placeholder="Ingrese la unidad de intervenciÃ³n"
                                     name="sb_unidad_intervencion"
                                     type="text"
                                     inputmode="numeric"
@@ -665,7 +666,7 @@ if (!in_array($diaSemana, [1, 2])) {
                                     <option value="" disabled selected><b>SELECCIONE</b></option>
                                     <option value="Arboletes">ARBOLETES</option>
                                     <option value="San_Juan">SAN JUAN</option>
-                                    <option value="Necocli">NECOCLÍ</option>
+                                    <option value="Necocli">NECOCLÃ</option>
                                     <option value="San_Pedro">SAN PEDRO</option>
                                     <option value="Guamuez">VALLE DEL GUAMUEZ</option>
                                     <option value="Leiva">LEIVA</option>
@@ -692,19 +693,19 @@ if (!in_array($diaSemana, [1, 2])) {
                                     <option value="ATENCION_PQRS">ATENCION PQRS</option>
                                     <option value="OBSERVACION_INTERVENTORIA">OBSERVACION INTERVENTORIA</option>
                                     <option value="RECONOCIMIENTO">RECONOCIMIENTO</option>
-                                    <option value="ACOMPAÑAMIENTO_SOCIAL">ACOMPAÑAMIENTO SOCIAL</option>
+                                    <option value="ACOMPAÃ‘AMIENTO_SOCIAL">ACOMPAÃ‘AMIENTO SOCIAL</option>
                                     <option value="CONTROL_DE_CALIDAD">CONTROL DE CALIDAD</option>
-                                    <option value="INTERLOCUCIÓN">INTERLOCUCIÓN</option>
+                                    <option value="INTERLOCUCIÃ“N">INTERLOCUCIÃ“N</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-md-4 p-1 px-2 my-2" id="grupo_lider" style="display:none;">
-                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_lider_cuadrilla">Líder de Cuadrilla</label>
+                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_lider_cuadrilla">LÃ­der de Cuadrilla</label>
                             <div class="input-group">
                                 <span class="input-group-text shadow-sm"><i class="bi bi-person-badge-fill"></i></span>
                                 <input class="form-control shadow-sm" style="font-size:0.9em;" id="sb_lider_cuadrilla" name="sb_lider_cuadrilla" type="text"
-                                    placeholder="Ingrese el nombre del líder de cuadrilla">
+                                    placeholder="Ingrese el nombre del lÃ­der de cuadrilla">
                             </div>
                         </div>
 
@@ -729,7 +730,7 @@ if (!in_array($diaSemana, [1, 2])) {
                             </div>
                         </div>
                         <div class="col-md-4 p-1 px-2 my-2" id="grupo_porque" style="display:none;">
-                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_porque_transporte">¿Por qué?</label>
+                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_porque_transporte">Â¿Por quÃ©?</label>
                             <div class="input-group">
                                 <span class="input-group-text shadow-sm"><i class="bi bi-chat-left-text"></i></span>
                                 <textarea class="form-control shadow-sm" style="font-size:0.9em;" id="sb_porque_transporte" name="sb_porque_transporte"
@@ -737,7 +738,7 @@ if (!in_array($diaSemana, [1, 2])) {
                             </div>
                         </div>
                         <div class="col-md-4 p-1 px-2 my-2" id="grupo_valor" style="display:none;">
-                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_cuanto_transporte">Cuánto Transporte</label>
+                            <label class="form-label fw-bold" style="font-size:0.9em;" for="sb_cuanto_transporte">CuÃ¡nto Transporte</label>
                             <div class="input-group">
                                 <span class="input-group-text shadow-sm"><i class="bi bi-cash-coin"></i></span>
                                 <input class="form-control shadow-sm" style="font-size:0.9em;" id="sb_cuanto_transporte" type="text" placeholder="Ej: 50.000">
@@ -756,7 +757,7 @@ if (!in_array($diaSemana, [1, 2])) {
                             </div>
                         </div>
                         <div class="col-md-4 p-1 px-2 my-2" id="grupo_hospedaje" style="display:none;">
-                            <label class="form-label fw-bold" for="sb_porque_hospedaje" style="font-size:0.9em;">¿Por qué?</label>
+                            <label class="form-label fw-bold" for="sb_porque_hospedaje" style="font-size:0.9em;">Â¿Por quÃ©?</label>
                             <div class="input-group">
                                 <span class="input-group-text shadow-sm"><i class="bi bi-chat-left-text"></i></span>
                                 <textarea class="form-control shadow-sm" style="font-size:0.9em;" id="sb_porque_hospedaje" name="sb_porque_hospedaje"
@@ -764,7 +765,7 @@ if (!in_array($diaSemana, [1, 2])) {
                             </div>
                         </div>
                         <div class="col-md-4 p-1 px-2 my-2" id="grupo_valor_hospedaje" style="display:none;">
-                            <label class="form-label fw-bold" for="sb_cuanto_hospedaje" style="font-size:0.9em;">Cuánto Hospedaje</label>
+                            <label class="form-label fw-bold" for="sb_cuanto_hospedaje" style="font-size:0.9em;">CuÃ¡nto Hospedaje</label>
                             <div class="input-group">
                                 <span class="input-group-text shadow-sm"><i class="bi bi-cash-coin"></i></span>
                                 <input class="form-control shadow-sm" style="font-size:0.9em;" id="sb_cuanto_hospedaje" type="text" placeholder="Ej: 120.000">
@@ -797,7 +798,7 @@ if (!in_array($diaSemana, [1, 2])) {
         });
     })();
 
-    // ===== Año "Otro..." =====
+    // ===== AÃ±o "Otro..." =====
     const sel = document.getElementById('sb_year_select');
     const otro = document.getElementById('sb_year_otro');
     const hidden = document.getElementById('sb_year');
@@ -849,7 +850,7 @@ if (!in_array($diaSemana, [1, 2])) {
             form.addEventListener('submit', (e) => {
                 if (!/^(19|20)\d{2}$/.test(hidden.value)) {
                     e.preventDefault();
-                    alert('Debe seleccionar o escribir un año válido (YYYY).');
+                    alert('Debe seleccionar o escribir un aÃ±o vÃ¡lido (YYYY).');
                 }
             });
         }
@@ -920,7 +921,7 @@ if (!in_array($diaSemana, [1, 2])) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Campos incompletos',
-                        text: 'Completa los campos obligatorios de esta sección.'
+                        text: 'Completa los campos obligatorios de esta secciÃ³n.'
                     });
                     return;
                 }
@@ -1135,7 +1136,7 @@ if (!in_array($diaSemana, [1, 2])) {
                     <div class="swal-saved-card">
                         <div class="swal-saved-header d-flex justify-content-center aling-items-center text-center w-100">
                             <i class="bi bi-clipboard2-check-fill" style="color:#002F55;font-size:20px;"></i>
-                            Confirmación de solicitud
+                            ConfirmaciÃ³n de solicitud
                         </div>
                         <div class="swal-saved-divider"></div>
                         <div class="swal-saved-body">
@@ -1144,9 +1145,9 @@ if (!in_array($diaSemana, [1, 2])) {
                                     style="font-size:70px;color:#002F55;opacity:.15;"></i>
                             </div>
                             <div class="swal-saved-text">
-                                Estás a punto de registrar una
+                                EstÃ¡s a punto de registrar una
                                 <strong>solicitud de baqueanos</strong>.<br>
-                                Verifica que toda la información sea correcta
+                                Verifica que toda la informaciÃ³n sea correcta
                                 antes de continuar.
                             </div>
                             <div class="d-flex gap-3 mt-3">
@@ -1221,7 +1222,7 @@ if (!in_array($diaSemana, [1, 2])) {
             if (this.value < fechaInicio.value) {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Fecha inválida',
+                    title: 'Fecha invÃ¡lida',
                     text: 'La fecha final no puede ser anterior a la fecha inicio.',
                     confirmButtonColor: '#002F55'
                 });

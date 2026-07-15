@@ -7,9 +7,68 @@ if (!function_exists('neiva_app_root')) {
     }
 }
 
+if (!function_exists('neiva_load_env_file')) {
+    function neiva_load_env_file(?string $envFile = null): void
+    {
+        static $loaded = false;
+
+        if ($loaded) {
+            return;
+        }
+
+        $loaded = true;
+        $envFile = $envFile ?? neiva_app_root() . DIRECTORY_SEPARATOR . '.env';
+
+        if (!is_file($envFile) || !is_readable($envFile)) {
+            return;
+        }
+
+        $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if ($lines === false) {
+            return;
+        }
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if ($line === '' || str_starts_with($line, '#')) {
+                continue;
+            }
+
+            $separatorPosition = strpos($line, '=');
+            if ($separatorPosition === false) {
+                continue;
+            }
+
+            $key = trim(substr($line, 0, $separatorPosition));
+            $value = trim(substr($line, $separatorPosition + 1));
+
+            if ($key === '') {
+                continue;
+            }
+
+            if (
+                strlen($value) >= 2
+                && (
+                    ($value[0] === '"' && $value[strlen($value) - 1] === '"')
+                    || ($value[0] === "'" && $value[strlen($value) - 1] === "'")
+                )
+            ) {
+                $value = substr($value, 1, -1);
+            }
+
+            $_ENV[$key] = $value;
+            $_SERVER[$key] = $value;
+            putenv($key . '=' . $value);
+        }
+    }
+}
+
 if (!function_exists('neiva_env')) {
     function neiva_env(string $key, ?string $default = null): ?string
     {
+        neiva_load_env_file();
+
         $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
         if ($value === false || $value === null || $value === '') {
             return $default;
@@ -19,10 +78,41 @@ if (!function_exists('neiva_env')) {
     }
 }
 
+neiva_load_env_file();
+
+if (!function_exists('neiva_env_bool')) {
+    function neiva_env_bool(string $key, bool $default = false): bool
+    {
+        $value = neiva_env($key);
+        if ($value === null) {
+            return $default;
+        }
+
+        $normalized = strtolower(trim($value));
+        if (in_array($normalized, ['1', 'true', 'yes', 'on'], true)) {
+            return true;
+        }
+
+        if (in_array($normalized, ['0', 'false', 'no', 'off'], true)) {
+            return false;
+        }
+
+        return $default;
+    }
+}
+
 if (!function_exists('neiva_app_env')) {
     function neiva_app_env(): string
     {
         return strtolower(neiva_env('APP_ENV', 'development'));
+    }
+}
+
+if (!function_exists('neiva_app_debug')) {
+    function neiva_app_debug(): bool
+    {
+        $default = neiva_app_env() !== 'production';
+        return neiva_env_bool('APP_DEBUG', $default);
     }
 }
 
@@ -110,6 +200,20 @@ if (!function_exists('neiva_private_storage_path')) {
     }
 }
 
+if (!function_exists('neiva_app_timezone')) {
+    function neiva_app_timezone(): string
+    {
+        return neiva_env('APP_TIMEZONE', 'America/Bogota') ?? 'America/Bogota';
+    }
+}
+
+if (!function_exists('neiva_db_timezone')) {
+    function neiva_db_timezone(): string
+    {
+        return neiva_env('DB_TIMEZONE', '-05:00') ?? '-05:00';
+    }
+}
+
 if (!function_exists('neiva_join_paths')) {
     function neiva_join_paths(string ...$segments): string
     {
@@ -150,6 +254,20 @@ if (!function_exists('neiva_normalize_relative_path')) {
     }
 }
 
+if (!function_exists('neiva_public_path')) {
+    function neiva_public_path(string $relativePath = ''): string
+    {
+        if ($relativePath === '') {
+            return neiva_app_root();
+        }
+
+        return neiva_join_paths(
+            neiva_app_root(),
+            neiva_normalize_relative_path($relativePath)
+        );
+    }
+}
+
 if (!function_exists('neiva_private_path')) {
     function neiva_private_path(string $relativePath = ''): string
     {
@@ -164,6 +282,63 @@ if (!function_exists('neiva_private_path')) {
     }
 }
 
+if (!function_exists('neiva_temp_path')) {
+    function neiva_temp_path(string $relativePath = ''): string
+    {
+        $base = neiva_env('TEMP_STORAGE_PATH');
+        if ($base === null) {
+            $base = neiva_app_root() . DIRECTORY_SEPARATOR . 'tmp';
+        }
+        $base = rtrim($base, "\\/");
+
+        if ($relativePath === '') {
+            return $base;
+        }
+
+        return neiva_join_paths(
+            $base,
+            neiva_normalize_relative_path($relativePath)
+        );
+    }
+}
+
+if (!function_exists('neiva_document_path')) {
+    function neiva_document_path(string $relativePath = ''): string
+    {
+        $base = neiva_env('PRIVATE_DOCUMENTS_PATH');
+        if ($base === null) {
+            $base = neiva_private_path('DOCUMENTOS');
+        }
+        $base = rtrim($base, "\\/");
+
+        if ($relativePath === '') {
+            return $base;
+        }
+
+        return neiva_join_paths(
+            $base,
+            neiva_normalize_relative_path($relativePath)
+        );
+    }
+}
+
+if (!function_exists('neiva_redirect')) {
+    function neiva_redirect(string $url): never
+    {
+        if (!preg_match('/^https?:\/\//i', $url)) {
+            if (str_starts_with($url, '/')) {
+                $url = neiva_app_url($url);
+            } else {
+                $url = neiva_app_url($url);
+            }
+        }
+
+        header('Location: ' . $url, true, 302);
+        exit;
+    }
+}
+
+
 if (!function_exists('neiva_ensure_directory')) {
     function neiva_ensure_directory(string $directory): void
     {
@@ -176,6 +351,77 @@ if (!function_exists('neiva_ensure_directory')) {
         }
     }
 }
+
+if (!function_exists('neiva_document_root_path')) {
+    function neiva_document_root_path(string $webPath = ''): string
+    {
+        $docRoot = rtrim((string) ($_SERVER['DOCUMENT_ROOT'] ?? ''), "\\/");
+        if ($docRoot === '') {
+            throw new RuntimeException('DOCUMENT_ROOT no est\u00e1 disponible.');
+        }
+
+        if ($webPath === '') {
+            return $docRoot;
+        }
+
+        return neiva_join_paths(
+            $docRoot,
+            neiva_normalize_relative_path($webPath)
+        );
+    }
+}
+
+if (!function_exists('neiva_login_url')) {
+    function neiva_login_url(): string
+    {
+        return neiva_app_url('login.php');
+    }
+}
+
+if (!function_exists('neiva_dashboard_url')) {
+    function neiva_dashboard_url(string $page = 'dashboardcopy'): string
+    {
+        return neiva_app_url('Arbimaps/index.php?page=' . rawurlencode($page));
+    }
+}
+
+if (!function_exists('neiva_configure_runtime')) {
+    function neiva_configure_runtime(): void
+    {
+        static $configured = false;
+
+        if ($configured) {
+            return;
+        }
+
+        $configured = true;
+
+        date_default_timezone_set(neiva_app_timezone());
+        ini_set('default_charset', 'UTF-8');
+        error_reporting(E_ALL);
+
+        if (neiva_app_debug()) {
+            ini_set('display_errors', '1');
+            ini_set('display_startup_errors', '1');
+        } else {
+            ini_set('display_errors', '0');
+            ini_set('display_startup_errors', '0');
+            ini_set('log_errors', '1');
+        }
+
+        if (!headers_sent()) {
+            header('X-Content-Type-Options: nosniff');
+            header('X-Frame-Options: SAMEORIGIN');
+            header('X-XSS-Protection: 1; mode=block');
+            header('Referrer-Policy: same-origin');
+            if (neiva_request_is_secure()) {
+                header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+            }
+        }
+    }
+}
+
+neiva_configure_runtime();
 
 if (!function_exists('neiva_bootstrap')) {
     function neiva_bootstrap(): void
@@ -229,8 +475,7 @@ if (!function_exists('neiva_abort')) {
 
         $json = $forceJson || neiva_is_api_request();
         if ($statusCode === 401 && !$json) {
-            $loginUrl = neiva_app_base_url() . '/login.php';
-            header('Location: ' . $loginUrl, true, 302);
+            header('Location: ' . neiva_login_url(), true, 302);
             exit;
         }
 
@@ -499,3 +744,7 @@ if (!function_exists('neiva_resolve_existing_path')) {
         throw new RuntimeException('La ruta local está fuera del almacenamiento autorizado.');
     }
 }
+
+// Inicializar la sesión de forma segura
+neiva_bootstrap();
+

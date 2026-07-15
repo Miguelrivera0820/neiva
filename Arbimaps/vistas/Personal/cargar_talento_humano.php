@@ -87,11 +87,11 @@ function ajustarRutaDocumento($rutaBD)
     if (empty($rutaBD)) {
         return [null, null];
     }
-    $prefijoCorrecto = "/arbimaps/Arbimaps/vistas/Personal/";
+    $prefijoCorrecto = neiva_app_url('Arbimaps/vistas/Personal/');
     if (strpos($rutaBD, $prefijoCorrecto) === 0) {
         $rutaWeb = $rutaBD;
     } else {
-        $prefijoViejo = "/arbimaps/Arbimaps/";
+        $prefijoViejo = neiva_app_url('Arbimaps/');
         if (strpos($rutaBD, $prefijoViejo) === 0) {
             $rutaBD = substr($rutaBD, strlen($prefijoViejo));
         }
@@ -558,7 +558,7 @@ $mysqli->close();
                 formData.append("solicitud_id", solicitudId);
                 formData.append("sol_archivo_otrosi", archivoInput.files[0]);
 
-                fetch("/arbimaps/Arbimaps/vistas/Personal/acciones/cargar_otrosi.php", {
+                fetch("<?= neiva_app_url('Arbimaps/vistas/Personal/acciones/cargar_otrosi.php') ?>", {
                         method: "POST",
                         body: formData
                     })
@@ -572,7 +572,7 @@ $mysqli->close();
                                 icon: 'success',
                                 confirmButtonText: 'Aceptar'
                             }).then(() => {
-                                window.location.href = `/arbimaps/Arbimaps/index.php?page=Personal/solicitudes_seguridad_social`;
+                                window.location.href = `<?= neiva_app_url('Arbimaps/index.php?page=Personal/solicitudes_seguridad_social') ?>`;
                             });
                         } else {
                             Swal.fire({
