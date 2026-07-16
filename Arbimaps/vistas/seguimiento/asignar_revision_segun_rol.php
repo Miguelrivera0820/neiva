@@ -810,6 +810,24 @@ if ($stmtResolucion = $mysqli->prepare($sqlResolucion)) {
     }
     $stmtResolucion->close();
 }
+
+// Consecutivo de Resoluciones
+$sql_next_res = "SELECT MAX(numero_resolucion) as max_res FROM resoluciones";
+$max_res = 0;
+if ($result_next_res = $mysqli->query($sql_next_res)) {
+    $row_next_res = $result_next_res->fetch_assoc();
+    if ($row_next_res['max_res'] !== null) {
+        $max_res = (int)$row_next_res['max_res'];
+    } else {
+        $sql_count_res = "SELECT COUNT(*) as total FROM resoluciones";
+        if ($result_count_res = $mysqli->query($sql_count_res)) {
+            $row_count_res = $result_count_res->fetch_assoc();
+            $max_res = (int)$row_count_res['total'];
+        }
+    }
+}
+$next_res = str_pad($max_res + 1, 3, "0", STR_PAD_LEFT);
+
 $requiere_resolucion = ($tipo_tramite_actual !== 'CONSERVACION' && $rol_flujo_actual === 'procedencia_juridica');
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -1652,7 +1670,7 @@ $requiere_resolucion = ($tipo_tramite_actual !== 'CONSERVACION' && $rol_flujo_ac
                                                         </div>
 
                                                         <div class="pj-resolution-number">
-                                                            <strong>RESOLUCION No. ________</strong>
+                                                            <strong>RESOLUCION No. <span id="resolucion_numero_val" contenteditable="true"><?php echo htmlspecialchars($next_res); ?></span></strong>
                                                         </div>
                                                         <div class="pj-doc-date">
                                                             Neiva, <?php echo date('Y-m-d'); ?>
@@ -2174,9 +2192,16 @@ $requiere_resolucion = ($tipo_tramite_actual !== 'CONSERVACION' && $rol_flujo_ac
                 })
                 .outputPdf("blob");
 
+            let numeroResolucion = "";
+            const numValElem = document.getElementById("resolucion_numero_val");
+            if (numValElem) {
+                numeroResolucion = numValElem.innerText.trim();
+            }
+
             const formData = new FormData();
             formData.append("cod_tramite", "<?php echo htmlspecialchars($cod_tramite); ?>");
             formData.append("pdf_file", pdfBlob, "resolucion.pdf");
+            formData.append("numero_resolucion", numeroResolucion);
 
             const response = await fetch("vistas/seguimiento/acciones/guardar_resolucion.php", {
                 method: "POST",
