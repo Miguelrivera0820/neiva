@@ -333,6 +333,7 @@ $certcatas = [
     'cert_catastrales/consulta_cert_catastrales',
     'cert_catastrales/generar_cert_catastrales',
     'cert_catastrales/manzanas_catastral',
+    'cert_catastrales/gestionar_pago_certificado',
     'cert_catastrales/acciones/insertar_sol_cert',
     'cert_catastrales/acciones/ver_datos_certificado'
 ];
@@ -341,6 +342,8 @@ $prodcatas = [
     'prod_catastrales/solicitar_producto',
     'prod_catastrales/consultar_producto',
     'prod_catastrales/cargar_documentos_producto',
+    'prod_catastrales/asignar_producto',
+    'prod_catastrales/revisar_producto',
 ];
 
 
@@ -656,7 +659,6 @@ $resultado = null;
     <link rel="icon" type="image/png" href="../imagen/L_NW.webp">
     <link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_CO">
@@ -692,7 +694,7 @@ $resultado = null;
 
                 <hr class="m-2 " style="color: #002f44 !important;">
 
-                <li class="mb-2 ">
+                <li class="my-2 ">
                     <a href="index.php?page=dashboardcopy" class="nav-link d-flex gap-2 justify-content-center align-items-center py-2 m-0 <?php echo in_array($currentPage, $datosgestionpages) ? 'active' : 'collapsed'; ?> " style="font-size: 0.8em;">
                         <i class="bi bi-house-fill" style="font-size: 1.3em"></i> Página Inicial
                     </a>
@@ -783,9 +785,11 @@ $resultado = null;
                         <div class="collapse " id="productosCatastrales" data-bs-parent="#accordionSidebar">
                             <div class="bg-white shadow-sm  rounded-4 p-2" style="color: #0F5699;">
                                 <h6 class="my-2 fw-bold ms-2" style="font-size: 0.8rem; color:#7f8e85">Acciones productos catastrales</h6>
-                                <a href="index.php?page=prod_catastrales/solicitar_producto" class="nav-link mb-0 especial" style="font-size: 0.8rem;">
-                                    <i class="bi bi-file-earmark-plus me-2"></i> Solicitar producto
-                                </a>
+                                <?php if (usuarioTieneAlgunRol(['ventanilla_catastral', 'administrador'])): ?>
+                                    <a href="index.php?page=prod_catastrales/solicitar_producto" class="nav-link mb-0 especial" style="font-size: 0.8rem;">
+                                        <i class="bi bi-file-earmark-plus me-2"></i> Solicitar producto
+                                    </a>
+                                <?php endif; ?>
                                 <a href="index.php?page=prod_catastrales/consultar_producto" class="nav-link mb-0 especial" style="font-size: 0.8rem;">
                                     <i class="bi bi-file-earmark-text me-2"></i> Consultar producto
                                 </a>

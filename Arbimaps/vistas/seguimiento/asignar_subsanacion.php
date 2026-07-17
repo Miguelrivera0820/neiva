@@ -201,6 +201,13 @@ if ($cedula_usuario && $cod_tramite) {
     }
 }
 
+if (empty($creacion_tram_cc_usuario) && !empty($entrega_cc_usuario)) {
+    $creacion_tram_cc_usuario       = $entrega_cc_usuario;
+    $creacion_tram_nombre_usuario   = $entrega_nombre_usuario;
+    $creacion_tram_apellido_usuario = $entrega_apellido_usuario;
+    $creacion_tram_rol_usuario      = $entrega_rol_usuario;
+}
+
 
 // Trae los documentos que subió QUIEN TE PASÓ el trámite
 // Verifica si tienes el rol del que pasó el trámite
@@ -224,6 +231,10 @@ $sql = "SELECT cedula_sesion,
                creacion_tram_nombre_usuario,
                creacion_tram_apellido_usuario,
                creacion_tram_rol_usuario,
+               asignacion_cc_usuario,
+               asignacion_nombre_usuario,
+               asignacion_apellido_usuario,
+               asignacion_rol_usuario,
                id_devolucion,
                documento_soporte
         FROM devolucion_tramites
@@ -255,28 +266,17 @@ if ($row = $result->fetch_assoc()) {
 
     // Aquí asignamos la ruta del documento
     $devolucion_documento        = $row['documento_soporte'];
-    if ($devolucion_rol_usuario === 'director_catastro') {
-    $entrega_rol_usuario = 'director_catastro';
-}
-}
-
-// Si el usuario originador de la devolución es director_catastro,
-// cargamos automáticamente sus datos para mostrarlos como destinatario.
-if ($devolucion_rol_usuario === 'director_catastro') {
-    $sqlDir = "SELECT nombre_usuario, apellido_usuario, cedula_usuario, rol_usuario
-               FROM usuarios_cons
-               WHERE rol_usuario = 'director_catastro'
-               LIMIT 1";
-    $resDir = $mysqli->query($sqlDir);
-
-    if ($resDir && $resDir->num_rows > 0) {
-        $dir = $resDir->fetch_assoc();
-
-        $entrega_cc_usuario       = $dir['cedula_usuario'];
-        $entrega_nombre_usuario   = $dir['nombre_usuario'];
-        $entrega_apellido_usuario = $dir['apellido_usuario'];
-        $entrega_rol_usuario      = $dir['rol_usuario'];
+    if (empty($creacion_tram_cc_usuario)) {
+        $creacion_tram_cc_usuario       = $row['creacion_tram_cc_usuario'] ?: $row['asignacion_cc_usuario'];
+        $creacion_tram_nombre_usuario   = $row['creacion_tram_nombre_usuario'] ?: $row['asignacion_nombre_usuario'];
+        $creacion_tram_apellido_usuario = $row['creacion_tram_apellido_usuario'] ?: $row['asignacion_apellido_usuario'];
+        $creacion_tram_rol_usuario      = $row['creacion_tram_rol_usuario'] ?: $row['asignacion_rol_usuario'];
     }
+
+    $entrega_cc_usuario       = $devolucion_cc_usuario;
+    $entrega_nombre_usuario   = $devolucion_nombre_usuario;
+    $entrega_apellido_usuario = $devolucion_apellido_usuario;
+    $entrega_rol_usuario      = $devolucion_rol_usuario;
 }
 
 
@@ -887,10 +887,10 @@ $stmt->close();
 
                             <div class="form-group mt-4 mb-0">
                                 <div class="d-flex justify-content-center">
-                                    <!-- Botón Aprobar -->
+                                    <!-- Boton Subsanar -->
                                     <button type="submit" name="accion" value="aprobar"
                                         class="btn btn-success px-4">
-                                        <i class="bi bi-bookmark-check-fill"></i> APROBAR
+                                        <i class="bi bi-bookmark-check-fill"></i> SUBSANAR
                                     </button>
 
                                     <!-- Espacio de 1cm -->

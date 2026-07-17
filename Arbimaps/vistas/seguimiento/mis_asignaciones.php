@@ -75,12 +75,15 @@ INNER JOIN tramite_radicacion AS tr
 INNER JOIN historial_asignacion AS his
     ON his.historial_cod_tramite = tr.cod_tramite
 WHERE at.asignacion_cc_usuario = ?
+AND at.asignacion_id_tramite = (
+    SELECT MAX(at2.asignacion_id_tramite)
+    FROM asignacion_tramite at2
+    WHERE at2.asignacion_cod_tramite = at.asignacion_cod_tramite
+)
 AND NOT EXISTS (
     SELECT 1
     FROM entrega_asignacion ea_mov
-    WHERE ea_mov.entrega_cod_tramite = at.asignacion_cod_tramite
-      AND ea_mov.historial_fecha_tramite >= at.asignacion_fecha_tramite
-      AND ea_mov.entrega_cc_usuario <> at.asignacion_cc_usuario
+    WHERE ea_mov.entrega_id_tramite = at.asignacion_id_tramite
 )
 AND NOT EXISTS (
     SELECT 1 FROM tramites_cancelados tc
@@ -235,6 +238,11 @@ $mapa_roles = [
                                         <td style="text-align: center; vertical-align: middle;">
                                             <a href="index.php?page=tramites/acciones/ver_tramite_rad&cod=<?php echo urlencode($tramite['asignacion_cod_tramite']); ?>"
                                                 class="btn btn-sm text-white my-1" style="background-color: #022F55">Ver</a>
+
+                                            <?php if ($rol_usuario === 'ventanilla_catastral'): ?>
+                                                <a href="index.php?page=seguimiento/resolucion&cod=<?php echo urlencode($tramite['asignacion_cod_tramite']); ?>"
+                                                    class="btn btn-sm btn-success my-1"><b>Respuesta</b></a>
+                                            <?php endif; ?>
 
                                             <?php
                                             $mapa_roles = [

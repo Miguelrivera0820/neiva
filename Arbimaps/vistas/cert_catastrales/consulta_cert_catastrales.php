@@ -2,6 +2,7 @@
 // require "../conexion.php";
 
 // session_start();
+require_once __DIR__ . '/../prod_catastrales/funciones_productos.php';
 
 $error_login = "";
 
@@ -39,12 +40,19 @@ if ($_POST) {
     }
 }
 
+$filtroSoloCertificados = '';
+if (isset($mysqli) && $mysqli instanceof mysqli && asegurarColumnaProductosCatastrales($mysqli)) {
+    $filtroSoloCertificados = "WHERE prod_tipo_producto IS NULL
+           OR TRIM(prod_tipo_producto) = ''";
+}
+
 $sql2 = "SELECT 
             certificado_hora_creacion,
             codigo_certificado,
             CONCAT(cert_primer_nombre_interesado, ' ', cert_segundo_nombre_interesado, ' ', cert_primer_apellido_interesado, ' ', cert_segundo_apellido_interesado) AS nombre_solicitante,
             cert_soporte_pago
         FROM certificado_catastral
+        $filtroSoloCertificados
         ORDER BY certificado_hora_creacion DESC";
 
 $resultado2 = $mysqli->query($sql2);
@@ -79,6 +87,26 @@ $resultado2 = $mysqli->query($sql2);
         /* Bordes más redondeados */
         margin: 0 2px;
     }
+
+    .estado-pago-certificado {
+        gap: .5rem;
+        min-width: 155px;
+    }
+
+    .estado-pago-certificado .badge {
+        border-radius: 8px;
+        font-size: .76rem;
+        padding: .55rem .65rem;
+        text-transform: uppercase;
+        width: 100%;
+    }
+
+    .estado-pago-certificado .btn {
+        font-size: .78rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
 </style>
 
 <div class="container-fluid">
@@ -129,33 +157,72 @@ $resultado2 = $mysqli->query($sql2);
                             </thead>
                             <tbody>
                                 <?php while ($row = $resultado2->fetch_assoc()) { ?>
+                                    <?php
+                                    $codigoCertificado = trim((string) ($row['codigo_certificado'] ?? ''));
+                                    $codigoCertificadoSeguro = preg_replace('/[^A-Za-z0-9_-]/', '', $codigoCertificado);
+                                    $directorioCertificado = dirname(__DIR__, 3)
+                                        . DIRECTORY_SEPARATOR . 'resoluciones'
+                                        . DIRECTORY_SEPARATOR . $codigoCertificadoSeguro;
+                                    $certificadoFirmado = $codigoCertificadoSeguro !== ''
+                                        && $codigoCertificadoSeguro === $codigoCertificado
+                                        && is_file($directorioCertificado . DIRECTORY_SEPARATOR . 'certificado.pdf')
+                                        && is_file($directorioCertificado . DIRECTORY_SEPARATOR . 'firmado.flag');
+                                    $soportePago = trim((string) ($row['cert_soporte_pago'] ?? ''));
+                                    $rutaSoporte = str_replace('\\', '/', $soportePago);
+                                    $rutaSoporteValida = $rutaSoporte !== ''
+                                        && strpos($rutaSoporte, 'soportes_pago/') === 0
+                                        && strpos($rutaSoporte, '..') === false
+                                        && strpos($rutaSoporte, "\0") === false;
+                                    $urlGestionPago = 'index.php?page=cert_catastrales/gestionar_pago_certificado'
+                                        . '&codigo=' . rawurlencode($codigoCertificado);
+                                    ?>
                                     <tr>
-                                        <td><?php echo $row['certificado_hora_creacion']; ?></td>
+                                        <td><?= htmlspecialchars((string) $row['certificado_hora_creacion'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
-                                            <a href="index.php?page=cert_catastrales/acciones/ver_datos_certificado&codigo_certificado=<?php echo $row['codigo_certificado']; ?>">
-                                                <?php echo $row['codigo_certificado']; ?>
+                                            <a href="index.php?page=cert_catastrales/acciones/ver_datos_certificado&codigo_certificado=<?= rawurlencode($codigoCertificado) ?>">
+                                                <?= htmlspecialchars($codigoCertificado, ENT_QUOTES, 'UTF-8') ?>
                                             </a>
                                         </td>
-                                        <td><?php echo $row['nombre_solicitante']; ?></td>
+                                        <td><?= htmlspecialchars(trim((string) $row['nombre_solicitante']), ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
-                                            <?php
-                                            if (!is_null($row['cert_soporte_pago']) && strlen($row['cert_soporte_pago']) > 0) {
-                                                echo "<span class='badge badge-success d-flex justify-content-center '>PAGADO</span>";
-                                            } else {
-                                                echo "<span class='badge badge-danger d-flex justify-content-center'>PENDIENTE</span>";
-                                            }
-                                            ?>
+                                            <div class="estado-pago-certificado d-flex flex-column align-items-stretch">
+                                                <?php if ($soportePago !== ''): ?>
+                                                    <span class="badge badge-success d-flex justify-content-center">Pagado</span>
+                                                    <?php if ($rutaSoporteValida): ?>
+                                                        <a
+                                                            href="<?= htmlspecialchars($rutaSoporte, ENT_QUOTES, 'UTF-8') ?>"
+                                                            class="btn btn-sm btn-outline-success"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer">
+                                                            <i class="bi bi-file-earmark-pdf me-1"></i>Ver soporte
+                                                        </a>
+                                                    <?php endif; ?>
+                                                <?php else: ?>
+                                                    <span class="badge badge-danger d-flex justify-content-center">Pendiente</span>
+                                                    <a href="<?= htmlspecialchars($urlGestionPago, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-receipt me-1"></i>Subir soporte de pago
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
                                         </td>
 
-                                        <td class="d-flex justify-content-center">
-                                            <a href="vistas/cert_catastrales/acciones/imprimir_certificado.php?codigo_certificado=<?php echo $row['codigo_certificado']; ?>"
+                                        <td class="text-center align-middle">
+                                            <a href="vistas/cert_catastrales/acciones/imprimir_certificado.php?codigo_certificado=<?= rawurlencode($codigoCertificado) ?>"
                                                 class="btn btn-sm text-white" style="background-color:#002F55"
                                                 target="_blank">
                                                 Imprimir
                                             </a>
                                         </td>
-                                        <td>
-                                            <a href="firmar_certificado.php?codigo=<?php echo $row['codigo_certificado']; ?>" class="btn btn-sm btn-secondary d-flex justify-content-center">Firmar</a>
+                                        <td class="text-center align-middle">
+                                            <?php if (!$certificadoFirmado): ?>
+                                                <a
+                                                    href="vistas/cert_catastrales/acciones/imprimir_certificado.php?codigo_certificado=<?= rawurlencode($codigoCertificado) ?>&amp;firmar=1"
+                                                    class="btn btn-sm btn-secondary d-flex justify-content-center btn-firmar-certificado"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer">
+                                                    Firmar
+                                                </a>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -186,6 +253,18 @@ $resultado2 = $mysqli->query($sql2);
                         url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
                     }
                 });
+
+                $('.btn-firmar-certificado').on('click', function() {
+                    sessionStorage.setItem('certificadoFirmaIniciada', String(Date.now()));
+                });
+            });
+
+            window.addEventListener('focus', function() {
+                const firmaIniciada = Number(sessionStorage.getItem('certificadoFirmaIniciada') || 0);
+                if (firmaIniciada > 0 && Date.now() - firmaIniciada >= 1000) {
+                    sessionStorage.removeItem('certificadoFirmaIniciada');
+                    window.location.reload();
+                }
             });
         </script>
 

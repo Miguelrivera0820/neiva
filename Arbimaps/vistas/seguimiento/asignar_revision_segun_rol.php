@@ -1,5 +1,8 @@
 <?php
 $rol_usuario        = $_SESSION['rol_usuario'] ?? '';
+if ($rol_usuario === 'director_proyectos') {
+    $rol_usuario = 'director_catastro';
+}
 $nombre_usuario     = $_SESSION['nombre_usuario'] ?? '';
 $apellido_usuario   = $_SESSION['apellido_usuario'] ?? '';
 $cedula_usuario     = $_SESSION['cedula_usuario'] ?? '';
@@ -395,15 +398,18 @@ $entrega_apellido_usuario       = null;
 $entrega_rol_usuario            = null;
 $observacion_a_usuario_tramite  = null;
 if ($cedula_usuario && $cod_tramite) {
-    $sqlBuscar =    "SELECT creacion_tram_cc_usuario,
-                            creacion_tram_nombre_usuario,
-                            creacion_tram_apellido_usuario,
-                            creacion_tram_rol_usuario
-                    FROM asignacion_tramite
-                    WHERE asignacion_cod_tramite = ?
-                    AND asignacion_cc_usuario = ?";
+    $sqlBuscar = "SELECT creacion_tram_cc_usuario,
+                         creacion_tram_nombre_usuario,
+                         creacion_tram_apellido_usuario,
+                         creacion_tram_rol_usuario
+                  FROM asignacion_tramite
+                  WHERE asignacion_cod_tramite = ?
+                    AND (asignacion_rol_usuario = ? OR asignacion_cc_usuario = ?)
+                  ORDER BY CASE WHEN asignacion_rol_usuario = ? THEN 0 ELSE 1 END,
+                           asignacion_id_tramite DESC
+                  LIMIT 1";
     $stmtBuscar = $mysqli->prepare($sqlBuscar);
-    $stmtBuscar->bind_param("ss", $cod_tramite, $cedula_usuario);
+    $stmtBuscar->bind_param("ssss", $cod_tramite, $rol_flujo_actual, $cedula_usuario, $rol_flujo_actual);
     $stmtBuscar->execute();
     $resultado = $stmtBuscar->get_result();
     if ($row = $resultado->fetch_assoc()) {
@@ -416,14 +422,15 @@ if ($cedula_usuario && $cod_tramite) {
                                     entrega_nombre_usuario,
                                     entrega_apellido_usuario,
                                     entrega_rol_usuario
-                            FROM entrega_asignacion
-                            WHERE entrega_cod_tramite = ?
-                            AND entrega_cc_usuario = ?
-                            ORDER BY id_entrega_asignacion DESC
-                            LIMIT 1";
+                             FROM entrega_asignacion
+                             WHERE entrega_cod_tramite = ?
+                               AND (entrega_rol_usuario = ? OR entrega_cc_usuario = ?)
+                             ORDER BY CASE WHEN entrega_rol_usuario = ? THEN 0 ELSE 1 END,
+                                      id_entrega_asignacion DESC
+                             LIMIT 1";
         $stmtBuscarEntrega = $mysqli->prepare($sqlBuscarEntrega);
         if ($stmtBuscarEntrega) {
-            $stmtBuscarEntrega->bind_param("ss", $cod_tramite, $cedula_usuario);
+            $stmtBuscarEntrega->bind_param("ssss", $cod_tramite, $rol_flujo_actual, $cedula_usuario, $rol_flujo_actual);
             $stmtBuscarEntrega->execute();
             $resultadoEntrega = $stmtBuscarEntrega->get_result();
             if ($rowEntrega = $resultadoEntrega->fetch_assoc()) {

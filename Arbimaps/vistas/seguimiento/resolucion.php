@@ -70,7 +70,13 @@ function rutaWebDocumentoResolucion($ruta)
     $ruta = preg_replace('#^\.\./#', '', $ruta);
     $ruta = preg_replace('#^(?:neiva/)?Arbimaps/#i', '', $ruta);
 
-    $carpetasPublicas = ['tramites_conservacion/', 'resoluciones/', 'archivos/'];
+    $posArchivos = stripos($ruta, 'archivos/');
+    if ($posArchivos !== false) {
+        $ruta = substr($ruta, $posArchivos);
+        return implode('/', array_map('rawurlencode', explode('/', $ruta)));
+    }
+
+    $carpetasPublicas = ['tramites_conservacion/', 'resoluciones/'];
     foreach ($carpetasPublicas as $carpeta) {
         $pos = stripos($ruta, $carpeta);
         if ($pos !== false) {
@@ -344,7 +350,7 @@ if (!empty($cod_tramite)) {
                     $ruta_resolucion = $ruta_completa ? rutaWebDocumentoResolucion($ruta_completa) : null;
                     $notificacion = $row_res['notificacion'];
                     if ($notificacion) {
-                        $ruta_notificacion = "../archivos/notificaciones/" . $notificacion;
+                        $ruta_notificacion = rutaWebDocumentoResolucion('archivos/notificaciones/' . $notificacion);
                     }
                 }
                 $stmt_res->close();
@@ -468,7 +474,7 @@ if (!empty($row['doc1'])) {
 $stmt_doc->close();
 
 // Manejar la subida de notificación
-if ($_POST && isset($_POST['upload_notificacion']) && in_array($rol_usuario, ['director_catastro', 'ventanilla_catastral'])) {
+if ($_POST && isset($_POST['upload_notificacion']) && in_array($rol_usuario, ['ventanilla_catastral', 'administrador'], true)) {
     $cod_tramite_post = $_POST['cod_tramite_hidden'];
     // Refetchear id_entrega para el POST
     $sql_entrega_post = "SELECT ea.id_entrega_asignacion FROM entrega_asignacion ea INNER JOIN resoluciones r ON ea.id_entrega_asignacion = r.id_entrega_asignacion WHERE ea.entrega_cod_tramite = ? AND ea.entrega_rol_usuario = 'procedencia_juridica' ORDER BY ea.id_entrega_asignacion DESC LIMIT 1";
@@ -501,14 +507,14 @@ if ($_POST && isset($_POST['upload_notificacion']) && in_array($rol_usuario, ['d
                 }
 
                 $file_extension = strtolower(pathinfo($_FILES['notificacion_file']['name'], PATHINFO_EXTENSION));
-                $extensiones_permitidas = ['pdf', 'doc', 'docx'];
-                if (!in_array($file_extension, $extensiones_permitidas)) {
-                    $response['message'] = "Solo se permiten archivos PDF, DOC o DOCX.";
+                $extensiones_permitidas = ['pdf'];
+                if (!in_array($file_extension, $extensiones_permitidas, true)) {
+                    $response['message'] = "Solo se permiten archivos PDF.";
                     responderNotificacionFinal($response);
                 }
 
                 $cod_seguro = preg_replace('/[^A-Za-z0-9_-]/', '_', $cod_tramite_post);
-                $new_filename = $cod_seguro . '_notificacion_' . date('Ymd_His') . '.' . $file_extension;
+                $new_filename = $cod_seguro . '_recibido_notificacion_' . date('Ymd_His') . '.pdf';
                 $target_file = $upload_dir . $new_filename;
 
                 if (move_uploaded_file($_FILES['notificacion_file']['tmp_name'], $target_file)) {
@@ -519,7 +525,7 @@ if ($_POST && isset($_POST['upload_notificacion']) && in_array($rol_usuario, ['d
                         if ($stmt_update->execute()) {
                             $response['success'] = true;
                             $response['filename'] = $new_filename;
-                            $response['message'] = "Notificacion cargada y tramite cerrado correctamente.";
+                            $response['message'] = "Recibido de notificacion cargado y tramite cerrado correctamente.";
                             $response['redirect'] = "index.php?page=tramites/cuentas_completadas/tramites_completos";
                             registrarCierreNotificacionFinal($mysqli, $cod_tramite_post, $new_filename);
 
@@ -549,6 +555,13 @@ if ($_POST && isset($_POST['upload_notificacion']) && in_array($rol_usuario, ['d
 
 
     responderNotificacionFinal($response);
+}
+
+if ($_POST && isset($_POST['upload_notificacion'])) {
+    responderNotificacionFinal([
+        'success' => false,
+        'message' => 'El recibido de notificacion final solo puede cargarlo ventanilla catastral o administrador.'
+    ]);
 }
 
 
@@ -1003,10 +1016,10 @@ if ($_POST && isset($_POST['upload_notificacion']) && in_array($rol_usuario, ['d
                                     </div>
                                 <?php endif; ?>
 
-                                <?php if (in_array($rol_usuario, ['director_catastro', 'ventanilla_catastral']) && empty($notificacion)): ?>
+                                <?php if (in_array($rol_usuario, ['ventanilla_catastral', 'administrador'], true) && empty($notificacion)): ?>
                                 <div class="card card-documentos col-8 mx-auto shadow p-3 border d-flex flex-column text-center my-4" id="upload-section">
                                     <div class="save-title">
-                                        <label class="form-label fw-bold">Subir notificacion de recibido</label>
+                                        <label class="form-label fw-bold">Subir recibido final de notificacion</label>
                                     </div>
                                     <div class="save-content">
                                         <form method="post" enctype="multipart/form-data" id="uploadForm">
@@ -1014,11 +1027,11 @@ if ($_POST && isset($_POST['upload_notificacion']) && in_array($rol_usuario, ['d
                                             <input type="hidden" name="upload_notificacion" value="1">
                                             <div class="input-group">
                                                 <label for="notificacion_file" class="input-group-text"><i class="bi bi-file-earmark-pdf-fill"></i></label>
-                                                <input type="file" class="form-control" id="notificacion_file" name="notificacion_file" accept=".pdf,.doc,.docx" required>
+                                                <input type="file" class="form-control" id="notificacion_file" name="notificacion_file" accept=".pdf,application/pdf" required>
                                             </div>
-                                            <div class="form-text">Seleccionar archivo de notificación (PDF, DOC, DOCX)</div>
+                                            <div class="form-text">Seleccionar recibido firmado por el usuario. Solo PDF.</div>
                                             <button type="submit" class="btn my-3 text-white" style="background-color: #002F55;"> <i class="bi bi-upload me-2"></i>
-                                                <?php echo $notificacion ? 'Reemplazar Notificación' : 'Subir Notificación'; ?>
+                                                <?php echo $notificacion ? 'Reemplazar recibido final' : 'Subir recibido final'; ?>
                                             </button>
                                         </form>
                                     </div>
