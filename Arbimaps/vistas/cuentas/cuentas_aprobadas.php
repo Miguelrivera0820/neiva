@@ -313,8 +313,7 @@ if (isset($_GET['numero_identidad'])) {
 <script>
     $(document).ready(function() {
         var table = $('#dataTable').DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            language: window.neivaDataTablesLanguage ? window.neivaDataTablesLanguage() : {},
                 // decimal: ",",
                 // thousands: ".",
                 // processing: "Procesando...",
@@ -337,7 +336,6 @@ if (isset($_GET['numero_identidad'])) {
                 //     sortAscending: ": activar para ordenar la columna de manera ascendente",
                 //     sortDescending: ": activar para ordenar la columna de manera descendente"
                 // }
-            },
             columnDefs: [{
                 targets: [1, 4, 5],
                 visible: false

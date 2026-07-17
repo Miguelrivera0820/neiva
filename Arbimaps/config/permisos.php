@@ -71,6 +71,7 @@ $PERMISOS = [
     ],
 
     'menu.tramites' => [
+        'admin',
         'ventanilla_catastral',
         'avaluos',
         'editor',
@@ -571,6 +572,7 @@ $PERMISOS = [
     ],
 
     'tramites.consultar' => [
+        'admin',
         'director_catastro',
         'ventanilla_catastral',
         'coordinacion_tecnica',
@@ -599,11 +601,13 @@ $PERMISOS = [
     ],
 
     'tramites.cancelar' => [
+        'admin',
         'director_catastro',
         'administrador',
     ],
 
     'tramites.exportar' => [
+        'admin',
         'procedencia_juridica',
         'coordinacion_tecnica',
         'director_catastro',

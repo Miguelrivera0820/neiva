@@ -340,9 +340,7 @@ $result = $mysqli->query($query);
         var table = $.fn.dataTable.isDataTable('#dataTable') ?
             $('#dataTable').DataTable() :
             $('#dataTable').DataTable({
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                },
+                language: window.neivaDataTablesLanguage ? window.neivaDataTablesLanguage() : {},
                 columnDefs: [{
                     targets: [7, 6, 8],
                     visible: false

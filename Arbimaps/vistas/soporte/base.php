@@ -591,9 +591,7 @@ foreach ($estados as $estado) {
 <script>
     $(document).ready(function() {
         $('#tablaTickets').DataTable({
-            language: {
-                url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
-            },
+            language: window.neivaDataTablesLanguage ? window.neivaDataTablesLanguage() : {},
             autoWidth: false,
             responsive: true
         });

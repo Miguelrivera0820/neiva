@@ -683,6 +683,21 @@ function buscarVentanillaOriginalRevisionSegunRol($mysqli, $cod_tramite)
     return $ventanilla;
 }
 
+function resolverVentanillaRevisionSegunRol($mysqli, $cod_tramite)
+{
+    $ventanillaOriginal = buscarVentanillaOriginalRevisionSegunRol($mysqli, $cod_tramite);
+    if ($ventanillaOriginal) {
+        return [
+            'cedula_usuario' => $ventanillaOriginal['creacion_tram_cc_usuario'],
+            'nombre_usuario' => $ventanillaOriginal['creacion_tram_nombre_usuario'],
+            'apellido_usuario' => $ventanillaOriginal['creacion_tram_apellido_usuario'],
+            'rol_usuario' => 'ventanilla_catastral',
+        ];
+    }
+
+    return buscarUsuarioPorRolRevisionSegunRol($mysqli, 'ventanilla_catastral');
+}
+
 $destino_conservacion = [
     'reconocedor'          => 'editor',
     'editor'               => 'consolidacion',
@@ -707,13 +722,28 @@ $rol_destino_flujo = $tipo_tramite_actual === 'CONSERVACION'
     : ($destino_revision_actualizacion[$rol_flujo_actual] ?? ($roles_disponibles[0] ?? ''));
 
 if ($rol_destino_flujo === 'ventanilla_catastral') {
-    $ventanillaOriginal = buscarVentanillaOriginalRevisionSegunRol($mysqli, $cod_tramite);
-    if ($ventanillaOriginal) {
-        $entrega_cc_usuario       = $ventanillaOriginal['creacion_tram_cc_usuario'];
-        $entrega_nombre_usuario   = $ventanillaOriginal['creacion_tram_nombre_usuario'];
-        $entrega_apellido_usuario = $ventanillaOriginal['creacion_tram_apellido_usuario'];
+    $usuarioDestino = resolverVentanillaRevisionSegunRol($mysqli, $cod_tramite);
+    if ($usuarioDestino) {
+        $entrega_cc_usuario       = $usuarioDestino['cedula_usuario'];
+        $entrega_nombre_usuario   = $usuarioDestino['nombre_usuario'];
+        $entrega_apellido_usuario = $usuarioDestino['apellido_usuario'];
+        $entrega_rol_usuario      = 'ventanilla_catastral';
+    } else {
+        $entrega_cc_usuario       = '';
+        $entrega_nombre_usuario   = '';
+        $entrega_apellido_usuario = '';
         $entrega_rol_usuario      = 'ventanilla_catastral';
     }
+} elseif (
+    $rol_destino_flujo
+    && !empty($creacion_tram_cc_usuario)
+    && !empty($creacion_tram_rol_usuario)
+    && $rol_destino_flujo === $creacion_tram_rol_usuario
+) {
+    $entrega_cc_usuario       = $creacion_tram_cc_usuario;
+    $entrega_nombre_usuario   = $creacion_tram_nombre_usuario;
+    $entrega_apellido_usuario = $creacion_tram_apellido_usuario;
+    $entrega_rol_usuario      = $creacion_tram_rol_usuario;
 } elseif ($rol_destino_flujo) {
     $usuarioDestino = buscarUsuarioPorRolRevisionSegunRol($mysqli, $rol_destino_flujo);
     if ($usuarioDestino) {

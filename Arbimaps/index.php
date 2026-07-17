@@ -476,16 +476,38 @@ if ($pagePermission !== null) {
     neiva_require_permission($pagePermission, $PERMISOS);
 }
 
-$rolModuloActual        = $_SESSION['rol_usuario'] ?? 'Sin rol';
+function seleccionarRolModuloActual(?string $permisoModulo, array $permisos): string
+{
+    $rolesUsuario = function_exists('getRolesUsuario')
+        ? getRolesUsuario()
+        : array_values(array_filter([
+            $_SESSION['rol_usuario'] ?? null,
+            $_SESSION['rol_usuario_dos'] ?? null,
+            $_SESSION['rol_usuario_tres'] ?? null,
+        ]));
+
+    if ($permisoModulo !== null && isset($permisos[$permisoModulo])) {
+        $rolesPermitidos = is_array($permisos[$permisoModulo])
+            ? $permisos[$permisoModulo]
+            : [$permisos[$permisoModulo]];
+
+        foreach ($rolesUsuario as $rolUsuario) {
+            if (in_array($rolUsuario, $rolesPermitidos, true)) {
+                return $rolUsuario;
+            }
+        }
+    }
+
+    return $rolesUsuario[0] ?? 'Sin rol';
+}
+
+$rolModuloActual        = seleccionarRolModuloActual($pagePermission, $PERMISOS);
 $nombreModuloActual     = 'Panel principal';
 
 $isSocial = in_array($currentPage, $noticiaspages);
 
 if (in_array($currentPage, $tramitesPages) || in_array($currentPage, $seguimientoPages)) {
     $nombreModuloActual = 'PQR - Trámites y seguimiento';
-    if (isset($_SESSION['rol_usuario_dos'])) {
-        $rolModuloActual = $_SESSION['rol_usuario_dos'];
-    }
 }
 if (in_array($currentPage, $restriccionesPrediosPages)) {
     $nombreModuloActual = 'Bloqueo de predios';
@@ -669,6 +691,50 @@ $resultado = null;
     <meta property="og:url" content="https://www.arbitrium.com.co/">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        window.neivaDataTablesLanguage = function() {
+            return {
+                decimal: "",
+                emptyTable: "No hay información disponible en la tabla",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                infoEmpty: "Mostrando 0 a 0 de 0 registros",
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
+                lengthMenu: "Mostrar _MENU_ registros",
+                loadingRecords: "Cargando...",
+                processing: "Procesando...",
+                search: "Buscar:",
+                zeroRecords: "No se encontraron registros coincidentes",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior"
+                },
+                aria: {
+                    sortAscending: ": activar para ordenar la columna ascendente",
+                    sortDescending: ": activar para ordenar la columna descendente"
+                }
+            };
+        };
+
+        window.neivaApplyDataTablesSpanishDefaults = function() {
+            if (!window.jQuery || !window.jQuery.fn || !window.jQuery.fn.dataTable) {
+                return;
+            }
+            window.jQuery.extend(true, window.jQuery.fn.dataTable.defaults, {
+                language: window.neivaDataTablesLanguage()
+            });
+        };
+
+        document.addEventListener('load', function(event) {
+            const target = event.target;
+            if (target && target.tagName === 'SCRIPT' && /jquery\.dataTables/i.test(target.src || '')) {
+                window.neivaApplyDataTablesSpanishDefaults();
+            }
+        }, true);
+
+        document.addEventListener('DOMContentLoaded', window.neivaApplyDataTablesSpanishDefaults);
+    </script>
 
 </head>
 
