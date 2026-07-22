@@ -28,6 +28,13 @@ if (isset($_SESSION['error_actualizacion'])) {
           </div>';
     unset($_SESSION['error_actualizacion']);
 }
+
+if (isset($_SESSION['debe_cambiar_password']) && $_SESSION['debe_cambiar_password'] == 1) {
+    echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>¡Atención!</strong> Por razones de seguridad, debes actualizar tu contraseña antes de continuar navegando.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>';
+}
 ?>
 
 <style>

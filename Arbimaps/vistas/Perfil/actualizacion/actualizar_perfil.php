@@ -113,6 +113,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $foto_usuario_guardada = $relacion_foto_contraseña['foto_user'];
     }
 
+    $debe_cambiar_password_val = (int)($_SESSION['debe_cambiar_password'] ?? 0);
+    if (!empty($password_input)) {
+        $debe_cambiar_password_val = 0;
+    }
+
     $sql = "UPDATE usuarios_cons SET
                 usuario_cons = ?,
                 password_cons = ?,
@@ -122,11 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 correo_usuario = ?,
                 celular_usuario = ?,
                 rol_usuario = ?,
-                foto_user = ?
+                foto_user = ?,
+                debe_cambiar_password = ?
             WHERE id_usuario = ?"; 
 
     $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param("sssssssssi", 
+    $stmt->bind_param("sssssssssii", 
                         $username, 
                         $password_cons, 
                         $cedula_usuario, 
@@ -136,10 +142,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $celular_usuario, 
                         $rol_usuario, 
                         $foto_usuario_guardada, 
+                        $debe_cambiar_password_val,
                         $id_usuario  
                     );
 
-    if ($stmt->execute() && $stmt->affected_rows > 0) {
+    if ($stmt->execute()) {
         $_SESSION['usuario_cons']       = $username;
         $_SESSION['nombre_usuario']     = $nombre_real;  
         $_SESSION['apellido_usuario']   = $apellido_usuario;
@@ -147,6 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['celular_usuario']    = $celular_usuario;
         $_SESSION['rol_usuario']        = $rol_usuario;
         $_SESSION['cedula_usuario']     = $cedula_usuario;
+        $_SESSION['debe_cambiar_password'] = $debe_cambiar_password_val;
 
         if (!empty($foto_usuario_guardada)) {
             $_SESSION['foto_user']      = $foto_usuario_guardada;

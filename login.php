@@ -28,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 rol_usuario,
                                 rol_usuario_dos,
                                 cedula_usuario,
-                                foto_user
+                                foto_user,
+                                debe_cambiar_password
                             FROM usuarios_cons 
                             WHERE usuario_cons = ?");
     if ($stmt) {
@@ -65,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['rol_usuario_dos'] = $row['rol_usuario_dos'];
                 $_SESSION['cedula_usuario'] = $row['cedula_usuario'];
                 $_SESSION['foto_user'] = !empty($row['foto_user']) ? $row['foto_user'] : '';
+                $_SESSION['debe_cambiar_password'] = (int) ($row['debe_cambiar_password'] ?? 0);
                 header('Location: ' . neiva_dashboard_url(), true, 302);
                 exit();
             } else {

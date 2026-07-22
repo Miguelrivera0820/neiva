@@ -453,6 +453,13 @@ if (!in_array($currentPage, $paginasHabilitadas, true)) {
     $_GET['page'] = $currentPage;
 }
 
+if (isset($_SESSION['debe_cambiar_password']) && $_SESSION['debe_cambiar_password'] == 1) {
+    if (!in_array($currentPage, $perfilPages, true)) {
+        header("Location: " . neiva_app_url('Arbimaps/index.php?page=Perfil/editar_perfil'));
+        exit();
+    }
+}
+
 $pagePermission = null;
 if (in_array($currentPage, $tramitesPages, true)) {
     $pagePermission = 'menu.tramites';
