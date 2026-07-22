@@ -314,27 +314,28 @@ foreach ($estados as $estado) {
             <div class="row">
 
                 <?php
-                // Calcular porcentajes respecto a trámites radicados
-                if ($total_rad > 0) {
+                // Calcular porcentajes respecto a tickets de soporte
+                $total_tickets = array_sum($conteos);
+                if ($total_tickets > 0) {
                     // Tickets pendientes
-                    $porcentaje_pendientes = round(($conteos['PENDIENTE'] / array_sum($conteos)) * 100);
+                    $porcentaje_pendientes = round(($conteos['PENDIENTE'] / $total_tickets) * 100);
                     $icono_pendientes = $porcentaje_pendientes >= 50 ? '<i class="bi bi-caret-up-fill text-success"></i>' : '<i class="bi bi-caret-down-fill text-danger"></i>';
                     $clase_pendientes = $porcentaje_pendientes >= 50 ? 'positive' : 'negative';
 
                     // Tickets en revisión
-                    $porcentaje_revision = round(($conteos['EN REVISION'] / array_sum($conteos)) * 100);
+                    $porcentaje_revision = round(($conteos['EN REVISION'] / $total_tickets) * 100);
                     $icono_revision = $porcentaje_revision >= 50 ? '<i class="bi bi-caret-up-fill text-success"></i>' : '<i class="bi bi-caret-down-fill text-danger"></i>';
                     $clase_revision = $porcentaje_revision >= 50 ? 'positive' : 'negative';
 
                     // Tickets solucionados
-                    $porcentaje_solucionado = round(($conteos['SOLUCIONADO'] / array_sum($conteos)) * 100);
+                    $porcentaje_solucionado = round(($conteos['SOLUCIONADO'] / $total_tickets) * 100);
                     $icono_solucionado = $porcentaje_solucionado >= 50 ? '<i class="bi bi-caret-up-fill text-success"></i>' : '<i class="bi bi-caret-down-fill text-danger"></i>';
                     $clase_solucionado = $porcentaje_solucionado >= 50 ? 'positive' : 'negative';
                 } else {
-                    // Si no hay trámites radicados, todos los porcentajes son 0
-                    $porcentaje_asignados = $porcentaje_culminados = $porcentaje_vencidos = $porcentaje_cartas = $porcentaje_cert = 0;
-                    $icono_asignados = $icono_culminados = $icono_vencidos = $icono_cartas = $icono_cert = '<i class="bi bi-caret-down-fill text-danger"></i>';
-                    $clase_asignados = $clase_culminados = $clase_vencidos = $clase_cartas = $clase_cert = 'negative';
+                    // Si no hay tickets de soporte, todos los porcentajes son 0
+                    $porcentaje_pendientes = $porcentaje_revision = $porcentaje_solucionado = 0;
+                    $icono_pendientes = $icono_revision = $icono_solucionado = '<i class="bi bi-caret-down-fill text-danger"></i>';
+                    $clase_pendientes = $clase_revision = $clase_solucionado = 'negative';
                 }
                 ?>
 

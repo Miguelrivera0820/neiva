@@ -17,8 +17,8 @@
 <script>
     let predios = [];
 
-    // Cargar datos del JSON
-    fetch('../dat_neiva/predios.json')
+    // Cargar datos del JSON a través del endpoint seguro de la API
+    fetch(<?= json_encode(neiva_app_url('Arbimaps/api/predios_dataset.php'), JSON_UNESCAPED_SLASHES) ?>)
         .then(res => res.json())
         .then(data => {
             predios = data;
@@ -57,7 +57,7 @@
                     if (campo === 'numero_doc_propietario') {
                         campoValor = campoValor.replace(/^0+/, '');
                     }
-                    return campoValor.startsWith(valorNormalizado);
+                    return campoValor.toLowerCase().includes(valorNormalizado.toLowerCase());
                 })
                 .slice(0, 10);
 
@@ -384,7 +384,7 @@
                                 <label for="num_cc_interesado" class="form-label fw-bold">Número Documento de Identidad Interesado</label>
                                 <div class="input-group shadow-sm">
                                     <span class="input-group-text"><i class="bi bi-person-vcard-fill"></i></span>
-                                    <input type="number" class="form-control" id="num_cc_interesado" name="num_cc_interesado" placeholder="Ingrese el número de documento..." name="cert_primer_nombre" aria-label="PrimerNombre" aria-describedby="basic-addon1">
+                                    <input type="number" class="form-control" id="num_cc_interesado" name="num_cc_interesado" placeholder="Ingrese el número de documento..." aria-label="NumCC" aria-describedby="basic-addon1" required>
                                 </div>
                             </div>
 
@@ -399,7 +399,7 @@
                                 <div class="input-group shadow-sm">
                                     <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
                                     <input type="text" class="form-control" id="cert_primer_nombre" name="cert_primer_nombre"
-                                        placeholder="Ingrese primer nombre..." name="cert_primer_nombre" aria-label="PrimerNombre"
+                                        placeholder="Ingrese primer nombre..." aria-label="PrimerNombre"
                                         required>
                                 </div>
                             </div>
@@ -416,7 +416,7 @@
                                 <div class="input-group shadow-sm">
                                     <span class="input-group-text"><i class="bi bi-person"></i></span>
                                     <input type="text" class="form-control" id="cert_segundo_nombre" name="cert_segundo_nombre"
-                                        placeholder="Ingrese segundo nombre..." name="cert_primer_nombre" aria-label="PrimerNombre">
+                                        placeholder="Ingrese segundo nombre..." aria-label="SegundoNombre">
                                 </div>
                             </div>
 
@@ -431,8 +431,8 @@
                                 <label for="cert_primer_apellido" class="form-label fw-bold">Primer apellido del interesado</label>
                                 <div class="input-group shadow-sm">
                                     <span class="input-group-text" id="basic-addon1"><i class="bi-people-fill"></i></span>
-                                    <input type="text" class="form-control" id="cert_primer_apellido" placeholder="Ingrese primer apellido..."
-                                        name="cert_primer_nombre" aria-label="PrimerApellido" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control" id="cert_primer_apellido" name="cert_primer_apellido" placeholder="Ingrese primer apellido..."
+                                        aria-label="PrimerApellido" aria-describedby="basic-addon1" required>
                                 </div>
                             </div>
 
@@ -446,8 +446,8 @@
                                 <label for="cert_segundo_apellido" class="form-label fw-bold">Segundo apellido del interesado</label>
                                 <div class="input-group shadow-sm">
                                     <span class="input-group-text" id="basic-addon1"><i class="bi-people"></i></span>
-                                    <input type="text" class="form-control" id="cert_segundo_apellido" placeholder="Ingrese segundo apellido..."
-                                        name="cert_segundo_apellido" aria-label="SegundoApellido">
+                                    <input type="text" class="form-control" id="cert_segundo_apellido" name="cert_segundo_apellido" placeholder="Ingrese segundo apellido..."
+                                        aria-label="SegundoApellido">
                                 </div>
                             </div>
 
@@ -549,7 +549,7 @@
                                 <div class="input-group shadow-sm">
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
                                     <input type="text" class="form-control" id="cc_propietario" name="cc_propietario" placeholder="Ingrese cedula de interesado..."
-                                        name="cc_propietario" aria-label="BusquedaporFMI">
+                                        aria-label="BusquedaporCedula">
                                 </div>
                             </div>
 

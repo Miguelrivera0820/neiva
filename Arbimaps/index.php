@@ -475,8 +475,6 @@ if (in_array($currentPage, $tramitesPages, true)) {
     $pagePermission = 'menu.usuarios';
 } elseif (in_array($currentPage, $soportePages, true)) {
     $pagePermission = 'menu.soporte';
-} elseif (in_array($currentPage, $perfilPages, true)) {
-    $pagePermission = 'menu.miPerfilPersonal';
 }
 
 if ($pagePermission !== null) {
@@ -548,6 +546,7 @@ $listaUnificada = [];
 $notificacionesNoLeidas = 0;
 
 $cedula_usuario_alertas = $_SESSION['cedula_usuario'] ?? '';
+$rol_usuario_alertas = $_SESSION['rol_usuario'] ?? '';
 if (!empty($cedula_usuario_alertas)) {
     $sql_alertas = "
         SELECT *
@@ -560,6 +559,7 @@ if (!empty($cedula_usuario_alertas)) {
                 at.asignacion_fecha_tramite AS fecha,
                 at.fecha_limite,
                 at.asignacion_cc_usuario AS cc_usuario,
+                at.asignacion_rol_usuario AS rol_usuario,
                 'Asignación' AS tipo_alerta
             FROM asignacion_tramite at
 
@@ -573,15 +573,35 @@ if (!empty($cedula_usuario_alertas)) {
                 COALESCE(ea.fecha_creacion, ea.historial_fecha_tramite) AS fecha,
                 ea.fecha_limite,
                 ea.entrega_cc_usuario AS cc_usuario,
+                ea.entrega_rol_usuario AS rol_usuario,
                 'Revisión' AS tipo_alerta
             FROM entrega_asignacion ea
+
+            UNION ALL
+
+            SELECT
+                dt.historial_cod_tramite AS cod_tramite,
+                dt.nombre_sesion AS remitente_nombre,
+                dt.apellido_sesion AS remitente_apellido,
+                dt.rol_actual AS remitente_rol,
+                dt.historial_fecha_tramite AS fecha,
+                dt.fecha_limite,
+                dt.creacion_tram_cc_usuario AS cc_usuario,
+                dt.creacion_tram_rol_usuario AS rol_usuario,
+                'Devolución' AS tipo_alerta
+            FROM devolucion_tramites dt
+            WHERE dt.estado_devolucion IS NULL OR dt.estado_devolucion <> 'SUBSANADO'
         ) AS movimientos
-        WHERE TRIM(CAST(movimientos.cc_usuario AS CHAR)) = TRIM(CAST(? AS CHAR))
+        WHERE (TRIM(CAST(movimientos.cc_usuario AS CHAR)) = TRIM(CAST(? AS CHAR))
+               OR ( (movimientos.cc_usuario IS NULL OR TRIM(CAST(movimientos.cc_usuario AS CHAR)) = '') 
+                    AND movimientos.rol_usuario = ? ))
           AND NOT EXISTS (
               SELECT 1 FROM (
                   SELECT asignacion_cod_tramite AS cod, asignacion_fecha_tramite AS f FROM asignacion_tramite
                   UNION ALL
                   SELECT entrega_cod_tramite AS cod, COALESCE(fecha_creacion, historial_fecha_tramite) AS f FROM entrega_asignacion
+                  UNION ALL
+                  SELECT historial_cod_tramite AS cod, historial_fecha_tramite AS f FROM devolucion_tramites
               ) AS ultimos
               WHERE ultimos.cod = movimientos.cod_tramite
                 AND ultimos.f > movimientos.fecha
@@ -598,14 +618,22 @@ if (!empty($cedula_usuario_alertas)) {
     ";
 
     if ($stmt_alertas = $mysqli->prepare($sql_alertas)) {
-        $stmt_alertas->bind_param("s", $cedula_usuario_alertas);
+        $stmt_alertas->bind_param("ss", $cedula_usuario_alertas, $rol_usuario_alertas);
         if ($stmt_alertas->execute()) {
             $result_alertas = $stmt_alertas->get_result();
             while ($row_alerta = $result_alertas->fetch_assoc()) {
                 $remitente = trim(($row_alerta['remitente_nombre'] ?? '') . ' ' . ($row_alerta['remitente_apellido'] ?? ''));
                 $rol_remitente = str_replace('_', ' ', $row_alerta['remitente_rol'] ?? '');
+                $tipo_alerta = $row_alerta['tipo_alerta'] ?? 'Asignación';
 
-                $mensaje = "Trámite " . $row_alerta['cod_tramite'] . " asignado por " . $remitente . " (" . $rol_remitente . ")";
+                $accion_remitente = 'asignado';
+                if ($tipo_alerta === 'Devolución') {
+                    $accion_remitente = 'devuelto';
+                } elseif ($tipo_alerta === 'Revisión') {
+                    $accion_remitente = 'enviado a revisión';
+                }
+
+                $mensaje = "Trámite " . $row_alerta['cod_tramite'] . " " . $accion_remitente . " por " . $remitente . " (" . $rol_remitente . ")";
 
                 $listaUnificada[] = [
                     'id' => $row_alerta['cod_tramite'],

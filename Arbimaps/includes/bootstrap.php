@@ -471,16 +471,24 @@ if (!function_exists('neiva_is_api_request')) {
 if (!function_exists('neiva_abort')) {
     function neiva_abort(int $statusCode, string $message, bool $forceJson = false): never
     {
-        http_response_code($statusCode);
+        if (!headers_sent()) {
+            http_response_code($statusCode);
+        }
 
         $json = $forceJson || neiva_is_api_request();
         if ($statusCode === 401 && !$json) {
-            header('Location: ' . neiva_login_url(), true, 302);
+            if (!headers_sent()) {
+                header('Location: ' . neiva_login_url(), true, 302);
+            } else {
+                echo '<script>window.location.href = ' . json_encode(neiva_login_url()) . ';</script>';
+            }
             exit;
         }
 
         if ($json) {
-            header('Content-Type: application/json; charset=utf-8');
+            if (!headers_sent()) {
+                header('Content-Type: application/json; charset=utf-8');
+            }
             echo json_encode([
                 'ok' => false,
                 'status' => $statusCode,
@@ -489,7 +497,9 @@ if (!function_exists('neiva_abort')) {
             exit;
         }
 
-        header('Content-Type: text/html; charset=utf-8');
+        if (!headers_sent()) {
+            header('Content-Type: text/html; charset=utf-8');
+        }
         echo '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Error</title></head><body>';
         echo '<h1>Error ' . (int) $statusCode . '</h1>';
         echo '<p>' . htmlspecialchars($message, ENT_QUOTES, 'UTF-8') . '</p>';

@@ -44,6 +44,7 @@ if (!empty($cedula_usuario)) {
                 at.asignacion_fecha_tramite AS fecha,
                 at.fecha_limite,
                 at.asignacion_cc_usuario AS cc_usuario,
+                at.asignacion_rol_usuario AS rol_usuario,
                 'Asignación' AS tipo_alerta
             FROM asignacion_tramite at
 
@@ -57,15 +58,35 @@ if (!empty($cedula_usuario)) {
                 COALESCE(ea.fecha_creacion, ea.historial_fecha_tramite) AS fecha,
                 ea.fecha_limite,
                 ea.entrega_cc_usuario AS cc_usuario,
+                ea.entrega_rol_usuario AS rol_usuario,
                 'Revisión' AS tipo_alerta
             FROM entrega_asignacion ea
+
+            UNION ALL
+
+            SELECT
+                dt.historial_cod_tramite AS cod_tramite,
+                dt.nombre_sesion AS remitente_nombre,
+                dt.apellido_sesion AS remitente_apellido,
+                dt.rol_actual AS remitente_rol,
+                dt.historial_fecha_tramite AS fecha,
+                dt.fecha_limite,
+                dt.creacion_tram_cc_usuario AS cc_usuario,
+                dt.creacion_tram_rol_usuario AS rol_usuario,
+                'Devolución' AS tipo_alerta
+            FROM devolucion_tramites dt
+            WHERE dt.estado_devolucion IS NULL OR dt.estado_devolucion <> 'SUBSANADO'
         ) AS movimientos
-        WHERE TRIM(CAST(movimientos.cc_usuario AS CHAR)) = TRIM(CAST(? AS CHAR))
+        WHERE (TRIM(CAST(movimientos.cc_usuario AS CHAR)) = TRIM(CAST(? AS CHAR))
+               OR ( (movimientos.cc_usuario IS NULL OR TRIM(CAST(movimientos.cc_usuario AS CHAR)) = '') 
+                    AND movimientos.rol_usuario = ? ))
           AND NOT EXISTS (
               SELECT 1 FROM (
                   SELECT asignacion_cod_tramite AS cod, asignacion_fecha_tramite AS f FROM asignacion_tramite
                   UNION ALL
                   SELECT entrega_cod_tramite AS cod, COALESCE(fecha_creacion, historial_fecha_tramite) AS f FROM entrega_asignacion
+                  UNION ALL
+                  SELECT historial_cod_tramite AS cod, historial_fecha_tramite AS f FROM devolucion_tramites
               ) AS ultimos
               WHERE ultimos.cod = movimientos.cod_tramite
                 AND ultimos.f > movimientos.fecha
@@ -82,15 +103,29 @@ if (!empty($cedula_usuario)) {
     ";
 
     if ($stmt_alertas = $mysqli->prepare($sql_alertas)) {
-        $stmt_alertas->bind_param("s", $cedula_usuario);
+        $stmt_alertas->bind_param("ss", $cedula_usuario, $rol_usuario);
         if ($stmt_alertas->execute()) {
             $result_alertas = $stmt_alertas->get_result();
             while ($row_alerta = $result_alertas->fetch_assoc()) {
                 $remitente = trim(($row_alerta['remitente_nombre'] ?? '') . ' ' . ($row_alerta['remitente_apellido'] ?? ''));
                 $rol_remitente = str_replace('_', ' ', $row_alerta['remitente_rol'] ?? '');
+                $tipo_alerta = $row_alerta['tipo_alerta'] ?? 'Asignación';
                 
-                $mensaje = "El trámite catastral fue asignado a tu bandeja por " . $remitente . " (" . ucwords($rol_remitente) . ").";
-                $tipo_badge = $row_alerta['tipo_alerta'] === 'Asignación' ? 'bg-primary' : 'bg-info';
+                $accion_remitente = 'asignado a tu bandeja';
+                $tipo_badge = 'bg-primary';
+                $icon_alerta = 'bi-person-plus-fill';
+
+                if ($tipo_alerta === 'Devolución') {
+                    $accion_remitente = 'devuelto para subsanación';
+                    $tipo_badge = 'bg-danger';
+                    $icon_alerta = 'bi-exclamation-octagon-fill';
+                } elseif ($tipo_alerta === 'Revisión') {
+                    $accion_remitente = 'enviado a revisión';
+                    $tipo_badge = 'bg-info';
+                    $icon_alerta = 'bi-file-earmark-check-fill';
+                }
+
+                $mensaje = "El trámite catastral fue " . $accion_remitente . " por " . $remitente . " (" . ucwords($rol_remitente) . ").";
                 
                 $alertas_tramites[] = [
                     'cod_tramite' => $row_alerta['cod_tramite'],
@@ -102,7 +137,7 @@ if (!empty($cedula_usuario)) {
                     'fecha_limite' => $row_alerta['fecha_limite'] ?? null,
                     'url' => 'index.php?page=tramites/acciones/ver_tramite_rad&cod=' . urlencode($row_alerta['cod_tramite']),
                     'badge_class' => $tipo_badge,
-                    'icon' => $row_alerta['tipo_alerta'] === 'Asignación' ? 'bi-person-plus-fill' : 'bi-file-earmark-check-fill'
+                    'icon' => $icon_alerta
                 ];
             }
         }
