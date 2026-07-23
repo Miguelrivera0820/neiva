@@ -17,6 +17,7 @@ Thumbs.db
 
 # Datos sensibles y respaldos
 *.sql
+!migrations/*.sql
 *.sqlite
 *.sqlite3
 *.bak
@@ -27,27 +28,30 @@ Thumbs.db
 
 # Logs y temporales
 *.log
-tmp/
-temp/
-cache/
+tmp/*
+temp/*
+cache/*
 
 # Datos operativos y almacenamiento privado/publico legacy
-/dat_neiva/
-/data/
-/uploads/
-tramites_conservacion/
-/tramites/
-/resoluciones/
-/archivos/
-/certificados/
-/usuarios/
-/acciones/
-Arbitrium_otrosi_Nuevo/
-Arbimaps/logs/
-Arbimaps/vistas/soporte/reportes_imagenes/
-Arbimaps/DOCUMENTOS/
-Arbimaps/tmp/
-neiva_private_storage/
+/dat_neiva/*
+/data/*
+/uploads/*
+tramites_conservacion/*
+/tramites/*
+/resoluciones/*
+/archivos/*
+/certificados/*
+/usuarios/*
+/acciones/*
+Arbitrium_otrosi_Nuevo/*
+Arbimaps/logs/*
+Arbimaps/vistas/soporte/reportes_imagenes/*
+Arbimaps/DOCUMENTOS/*
+Arbimaps/tmp/*
+neiva_private_storage/*
+
+# Permitir archivos .gitkeep para mantener estructura de directorios
+!**/.gitkeep
 
 # Scripts peligrosos o temporales de mantenimiento
 sync.php

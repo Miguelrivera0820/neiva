@@ -1,0 +1,15 @@
+=== INICIO PROCESO: 2026-01-22 15:19:38 ===
+Código Trámite: ARB99-01
+Source Table: tramite_radicacion
+
+INSERT en no_procede_completar - ID: 10
+
+Verificando tramites_por_completar...
+¿Ya existe? NO
+
+INSERTANDO nuevo registro en tramites_por_completar...
+INSERT completado - Filas insertadas: 1
+
+
+=== PROCESO COMPLETADO EXITOSAMENTE ===
+Fecha/Hora: 2026-01-22 15:19:38

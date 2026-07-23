@@ -1,0 +1,15 @@
+=== INICIO PROCESO: 2026-01-22 14:51:59 ===
+Código Trámite: ARB801
+Source Table: tramite_radicacion
+
+INSERT en no_procede_completar - ID: 5
+
+Verificando tramites_por_completar...
+¿Ya existe? NO
+
+INSERTANDO nuevo registro en tramites_por_completar...
+INSERT completado - Filas insertadas: 1
+
+
+=== PROCESO COMPLETADO EXITOSAMENTE ===
+Fecha/Hora: 2026-01-22 14:51:59

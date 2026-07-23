@@ -1,0 +1,15 @@
+=== INICIO PROCESO: 2026-07-03 00:02:29 ===
+Código Trámite: CAT-2026-10-00003
+Source Table: tramite_radicacion
+
+INSERT en no_procede_completar - ID: 2
+
+Verificando tramites_por_completar...
+¿Ya existe? NO
+
+INSERTANDO nuevo registro en tramites_por_completar...
+INSERT completado - Filas insertadas: 1
+
+
+=== PROCESO COMPLETADO EXITOSAMENTE ===
+Fecha/Hora: 2026-07-03 00:02:29
