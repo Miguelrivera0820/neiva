@@ -32,16 +32,16 @@ temp/
 cache/
 
 # Datos operativos y almacenamiento privado/publico legacy
-dat_neiva/
-data/
-uploads/
+/dat_neiva/
+/data/
+/uploads/
 tramites_conservacion/
-tramites/
-resoluciones/
-archivos/
-certificados/
-usuarios/
-acciones/
+/tramites/
+/resoluciones/
+/archivos/
+/certificados/
+/usuarios/
+/acciones/
 Arbitrium_otrosi_Nuevo/
 Arbimaps/logs/
 Arbimaps/vistas/soporte/reportes_imagenes/
